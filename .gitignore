@@ -2,3 +2,6 @@ backend/env
 backend/venv
 backend\venv
 backend\env
+.DS_Store
+backend/.DS_Store
+backend/.idea/backend.iml
