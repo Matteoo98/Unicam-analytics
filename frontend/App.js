@@ -5,19 +5,14 @@ import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './store/reducers/';
-import thunk from 'redux-thunk';
-
 import { Ionicons } from '@expo/vector-icons';
 
 import Mappa from './screens/Mappa';
+import MappaDinamica from './screens/MappaDinamica';
 import HeaderButton from './components/HeaderButton';
 
 import DrawerContent from './components/DrawerContent';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -30,7 +25,9 @@ function tabMappa() {
           let iconName;
 
           if (route.name === 'Mappa') {
-            iconName = 'ios-home'
+            iconName = 'ios-map'
+          } else if (route.name === 'MappaDinamica') {
+            iconName = 'ios-search'
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         }
@@ -41,6 +38,7 @@ function tabMappa() {
       }}
     >
       <Tab.Screen name="Mappa" component={MappaScreen} />
+      <Tab.Screen name="MappaDinamica" component={MappaDinamicaScreen} />
     </Tab.Navigator>
   );
 }
@@ -49,6 +47,28 @@ function MappaScreen() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Mappa" component={Mappa} options={({ navigation }) => ({
+        headerLeft: () => <HeaderButton onPressLeft={() => navigation.toggleDrawer()} />,
+        title: 'DASHBOARD',
+        headerTitleStyle: { fontWeight: 'bold' },
+        headerStyle: {
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.34,
+          shadowRadius: 6.27,
+          elevation: 10,
+        }
+      })} />
+    </Stack.Navigator>
+  );
+}
+
+function MappaDinamicaScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="MappaDinamica" component={MappaDinamica} options={({ navigation }) => ({
         headerLeft: () => <HeaderButton onPressLeft={() => navigation.toggleDrawer()} />,
         title: 'DASHBOARD',
         headerTitleStyle: { fontWeight: 'bold' },
@@ -84,8 +104,6 @@ function MainNavigation() {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <MainNavigation />
-    </Provider>
+    <MainNavigation />
   )
 }

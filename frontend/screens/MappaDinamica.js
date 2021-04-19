@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
-import MapboxGL from "@react-native-mapbox-gl/maps";
 
-const Mappa = () => {
+const MappaDinamica = () => {
     return (
         <View style={styles.container}>
 
             <View style={styles.cardTitolo}>
-                <Text style={{ fontSize: 20, fontWeight: '500' }}>MAPPA</Text>
+                <Text style={{ fontSize: 20, fontWeight: '500' }}>MappaDinamica</Text>
             </View>
             <View style={styles.mappa}>
             </View>
@@ -59,4 +58,4 @@ const styles = StyleSheet.create({
         elevation: 10,
     }
 })
-export default Mappa;
+export default MappaDinamica;

@@ -11,22 +11,13 @@ import {
     TouchableRipple,
     Switch
 } from 'react-native-paper';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
 import { Icon } from 'react-native-elements';
-import Toast from 'react-native-tiny-toast';
 
 export function DrawerContent(props) {
-
-    const dispatch = useDispatch();
-    const data = useSelector(state => state.authUser.data);
-    // const userId = useSelector(state => state.authUser.userId);
-    // const password = useSelector(state => state.authUser.password);
-
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
@@ -95,7 +86,7 @@ export function DrawerContent(props) {
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
-                                    name='business'
+                                    name='map'
                                     type='material'
                                     color={color}
                                     size={size}
@@ -108,21 +99,6 @@ export function DrawerContent(props) {
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
-            <Drawer.Section style={styles.bottomDrawerSection}>
-                <DrawerItem
-                    icon={({ color, size }) => (
-                        <Icon
-                            name="exit-to-app"
-                            color={'red'}
-                            size={size}
-                            type='material-community'
-                        />
-                    )}
-                    label="Log Out"
-                    labelStyle={{ color: 'red' }}
-                    onPress={() => logOut(data, dispatch)}
-                />
-            </Drawer.Section>
         </View>
     );
 }
