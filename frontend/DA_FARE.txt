@@ -1,0 +1,4 @@
+1-  ListaGenericiScuole deve già contenere il dato di ateneo e non essere calcolato con "somma" dal frontend
+
+2-  Manutenzione server offline: controllare su ogni schermata del frontend prima di scaricare i dati se il server 
+    è attivo o meno e in caso tornare una schermata di attesa

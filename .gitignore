@@ -6,7 +6,7 @@ backend\env
 backend/.DS_Store
 backend/.idea/backend.iml
 .idea
-
+frontend/node_modules
 
 
 
