@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
-import MapboxGL from "@react-native-mapbox-gl/maps";
+import MapView from 'react-native-maps';
 
 const Mappa = () => {
     return (
@@ -11,6 +11,7 @@ const Mappa = () => {
                 <Text style={{ fontSize: 20, fontWeight: '500' }}>MAPPA</Text>
             </View>
             <View style={styles.mappa}>
+                <MapView style={styles.map} />
             </View>
             <View style={styles.cardTitolo}>
                 <Text style={{ fontSize: 20, fontWeight: '500' }}>slider</Text>
@@ -57,6 +58,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.34,
         shadowRadius: 6.27,
         elevation: 10,
-    }
+    },
+    map: {
+        width: SCREEN_WIDTH / 1.13,
+        height: SCREEN_HEIGHT / 1.7,
+        borderRadius: 10,
+        // width: Dimensions.get('window').width,
+        // height: Dimensions.get('window').height,
+      },
 })
 export default Mappa;
