@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Platform, StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
 import MapView, { Circle } from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { ActivityIndicator, Colors } from 'react-native-paper';
@@ -11,6 +11,7 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 
 import data from './data';
 import { color } from 'react-native-reanimated';
+import CustomMarker from '../components/CustomMarker';
 
 const Mappa = () => {
 
@@ -20,13 +21,21 @@ const Mappa = () => {
     const [latitudine, setLatitudine] = useState(0);
     const [longitudine, setLongitudine] = useState(0);
     const [minimo, setMinimo] = useState(1);
-    const [massimo, setMassimo] = useState(1000);
+    const [massimo, setMassimo] = useState(250);
     const [index, setIndex] = useState(0);
     const [raggio, setRaggio] = useState(0);
 
     function setIndice(indice) {
         switch (indice) {
-            case 0, 1, 2:
+            case 0:
+                setMinimo(1);
+                setMassimo(250);
+                break;
+            case 1:
+                setMinimo(1);
+                setMassimo(1000);
+                break;
+            case 2:
                 setMinimo(1);
                 setMassimo(1000);
                 break;
@@ -68,13 +77,44 @@ const Mappa = () => {
                     showsUserLocation={true}
                 >
                     {data.map((marker, index) => (
+                        
                         <Marker
                             key={index}
                             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                             title={marker.title}
                             description={marker.description}
                             pinColor={marker.pinColor}
-                        />
+                        >
+                            {/* Platform.OS !== 'ios' ? <CustomMarker {...marker} /> : null */}
+                            <Callout style={{
+                                width: 150,
+                                // height: 100,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <View style={{
+                                    // borderWidth: 1,
+                                    flex: 2,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                    <Text style={styles.titolo}>{marker.title}</Text>
+                                </View>
+                                <View style={{
+                                    // borderWidth: 1,
+                                    flex: 4,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                }}>
+                                    <Text style={styles.text}>Numero iscritti: {marker.description}</Text>
+                                    <Text style={styles.text}>Maschi: xxx</Text>
+                                    <Text style={styles.text}>Femmine: xxx</Text>
+                                    <Text style={styles.text}>Età media: xxx</Text>
+                                </View>
+                            </Callout>
+                        </Marker>
                     ))}
 
                     <Circle center={{ latitude: latitudine, longitude: longitudine }} radius={raggio} fillColor={"rgba(0,122,255,0.2)"} strokeColor={"#007AFF"} />
@@ -112,7 +152,7 @@ const Mappa = () => {
                         flexDirection: 'row',
                     }}>
                         <View style={styles.maxmin}>
-                            <Text style={{ color: "#007AFF" }}>{minimo}</Text>
+                            <Text style={{ color: "#007AFF" }}>{(raggio / 1000).toFixed(0)} Km</Text>
                         </View>
                         <View style={styles.slider}>
                             <Slider
@@ -127,7 +167,7 @@ const Mappa = () => {
                             />
                         </View>
                         <View style={styles.maxmin}>
-                            <Text style={{ color: "#007AFF" }}>{massimo}</Text>
+                            <Text style={{ color: "#007AFF" }}>{massimo} Km</Text>
                         </View>
                     </View>
                 </View>
@@ -182,6 +222,13 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         justifyContent: 'center',
-    }
+    },
+    titolo: {
+        fontSize: 20,
+    },
+    text: {
+        fontSize: 15,
+        fontWeight: "300",
+    },
 })
 export default Mappa;

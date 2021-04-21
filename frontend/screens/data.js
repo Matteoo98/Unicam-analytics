@@ -17,7 +17,7 @@ export default [
         latitude: 43.2991,
         longitude: 13.442,
         title: "Macerata",
-        description: "10",
+        description: "9999",
         pinColor: "red",
     },
     {
