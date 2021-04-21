@@ -48,7 +48,7 @@ function MappaScreen() {
     <Stack.Navigator>
       <Stack.Screen name="Mappa" component={Mappa} options={({ navigation }) => ({
         headerLeft: () => <HeaderButton onPressLeft={() => navigation.toggleDrawer()} />,
-        title: 'DASHBOARD',
+        title: 'MAPPA',
         headerTitleStyle: { fontWeight: 'bold' },
         headerStyle: {
           shadowColor: "#000",
@@ -70,7 +70,7 @@ function MappaDinamicaScreen() {
     <Stack.Navigator>
       <Stack.Screen name="MappaDinamica" component={MappaDinamica} options={({ navigation }) => ({
         headerLeft: () => <HeaderButton onPressLeft={() => navigation.toggleDrawer()} />,
-        title: 'DASHBOARD',
+        title: 'MAPPA',
         headerTitleStyle: { fontWeight: 'bold' },
         headerStyle: {
           shadowColor: "#000",
