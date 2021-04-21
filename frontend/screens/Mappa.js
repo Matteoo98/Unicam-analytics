@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { ActivityIndicator, Colors } from 'react-native-paper';
 
 import data from './data';
 
@@ -17,46 +18,35 @@ const Mappa = () => {
     const [longitudine, setLongitudine] = useState(0);
 
     useEffect(() => {
+
+        /*  PRENDE LA POSIZIONE ATTUALE  */
         (async () => {
             let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
             if (status !== 'granted') {
                 console.log('PERMISSION DENIED');
                 setErrorMsg("PERMISSION DENIED");
             }
-
             const location = await Location.getCurrentPositionAsync();
             setLatitudine(location.coords.latitude);
             setLongitudine(location.coords.longitude);
             setLocation(location);
         })();
+        
     }, []);
-    /*
-        let text = 'Waiting..';
-        if (errorMsg) {
-            text = errorMsg;
-        } else if (location) {
-            // text = JSON.stringify(location);
-            // console.log("longitude", location.coords.longitude);
-            // console.log("latitude", location.coords.latitude);
-            setLatitudine(location.coords.latitude);
-            setLongitudine(location.coords.longitude);
-            console.log("latitudine", latitudine, "longitudine", longitudine);
-        }
-    */
+ 
     return (
         <View>
             {  
-            latitudine != 0 ? 
+            latitudine != 0 && longitudine != 0 ? 
             <MapView
                 style={styles.map}
                 initialRegion={{
                     latitude: latitudine,
                     longitude: longitudine,
-                    // latitudeDelta: 8,
-                    // longitudeDelta: 8,
+                    latitudeDelta: 5,
+                    longitudeDelta: 5,
                 }}
-            // showsUserLocation={true}
+            showsUserLocation={true}
             >
                 {data.map((marker, index) => (
                     <Marker
@@ -67,7 +57,7 @@ const Mappa = () => {
                         pinColor={marker.pinColor}
                     />
                 ))}
-            </MapView> : <ActivityIndicator size="large" />
+            </MapView> : <ActivityIndicator animating={true} color={Colors.red800} style={styles.map} size={'large'} />
             }
 
             <View style={styles.viewCardSlider}>
@@ -99,12 +89,10 @@ const styles = StyleSheet.create({
         marginBottom: '5%',
     },
     viewCardSlider: {
-        // flex: 1,
         width: SCREEN_WIDTH,
         height: '10%',
         position: 'absolute',
         alignItems: 'center',
-        // justifyContent: 'flex-end',
         bottom: "1%"
     },
     map: {
