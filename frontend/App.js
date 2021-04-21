@@ -16,7 +16,7 @@ import DrawerContent from './components/DrawerContent';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
-
+/*
 function tabMappa() {
   return (
     <Tab.Navigator
@@ -42,7 +42,7 @@ function tabMappa() {
     </Tab.Navigator>
   );
 }
-
+*/
 function MappaScreen() {
   return (
     <Stack.Navigator>
@@ -64,7 +64,7 @@ function MappaScreen() {
     </Stack.Navigator>
   );
 }
-
+/*
 function MappaDinamicaScreen() {
   return (
     <Stack.Navigator>
@@ -85,8 +85,8 @@ function MappaDinamicaScreen() {
       })} />
     </Stack.Navigator>
   );
-}
-
+} 
+*/
 function MainNavigation() {
   return (
     <NavigationContainer>
@@ -96,7 +96,7 @@ function MainNavigation() {
         hidden={Platform.OS === 'ios' ? false : true}
       />
       <Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>
-        <Drawer.Screen name="Mappa" component={tabMappa} />
+        <Drawer.Screen name="Mappa" component={MappaScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
