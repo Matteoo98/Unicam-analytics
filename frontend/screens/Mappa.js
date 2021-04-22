@@ -8,6 +8,7 @@ import * as Permissions from 'expo-permissions';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import axios from 'axios';
 
 import data from './data';
 import { color } from 'react-native-reanimated';
@@ -17,31 +18,37 @@ const Mappa = () => {
 
     /*  HOOKS  */
     const [location, setLocation] = useState(null);
+    const [error, setError] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [latitudine, setLatitudine] = useState(0);
     const [longitudine, setLongitudine] = useState(0);
     const [minimo, setMinimo] = useState(1);
     const [massimo, setMassimo] = useState(250);
     const [index, setIndex] = useState(0);
-    const [raggio, setRaggio] = useState(0);
+    const [raggio, setRaggio] = useState(10);
+    const [categoria, setCategoria] = useState("comune");
 
     function setIndice(indice) {
         switch (indice) {
             case 0:
                 setMinimo(1);
                 setMassimo(250);
+                setCategoria("comune");
                 break;
             case 1:
                 setMinimo(1);
                 setMassimo(1000);
+                setCategoria("provincia");
                 break;
             case 2:
                 setMinimo(1);
                 setMassimo(1000);
+                setCategoria("regione");
                 break;
             case 3:
                 setMinimo(1);
                 setMassimo(14500);
+                setCategoria("nazione");
                 break;
         }
     }
@@ -60,6 +67,20 @@ const Mappa = () => {
             setLongitudine(location.coords.longitude);
             setLocation(location);
         })();
+
+        axios.get(`http://locallhost:5000/calculateLocations`, {
+            params: {
+                category: categoria,
+                longitude: longitudine,
+                latitude: latitudine,
+                distance: raggio,
+            }
+        }).then(data => {
+            console.log("data", data);
+        }).catch(error => {
+            console.log(error);
+            setError(true);
+        })
 
     }, []);
 
