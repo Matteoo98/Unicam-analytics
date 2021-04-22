@@ -16,7 +16,7 @@ class DatabaseManager:
         self.collectionLocations = self.db["locations"]
         self.collectionIscritti = self.db["iscritti"]
 
-    def retrieveIscrittiComune(self, longitude, latitude, distance):
+    def geo_spatial_query(self, longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
@@ -31,13 +31,18 @@ class DatabaseManager:
             }
         ]):
             listaCitta.append(x)
+        return listaCitta
+
+    def retrieveIscrittiComune(self, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
+
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
                     "$project": {
                         "_id": 1,
                         "iscr_comune_residenza_desc": 1,
-                        "iscr_cds_desc":1,
+                        "iscr_cds_desc": 1,
                         "iscr_sesso": 1,
                         "year": {"$substr": ["$iscr_data_nascita", 6, 4]},
                     }
@@ -45,21 +50,23 @@ class DatabaseManager:
                 {"$match": {"iscr_comune_residenza_desc": a['name']}},
                 {
                     "$group": {
-                        "id": {"$first": "$iscr_comune_residenza_desc"},
-                        "_id": "$id",
+                        "_id": "$iscr_comune_residenza_desc",
                         "count": {"$sum": 1},
                         "maschi": {"$sum": {"$cond": [{"$eq": ["M", "$iscr_sesso"]}, 1, 0]}},
                         "femmine": {"$sum": {"$cond": [{"$eq": ["F", "$iscr_sesso"]}, 1, 0]}},
                         "averageYear": {"$avg": {"$toInt": "$year"}}
+
                     }
                 },
                 {
                     "$addFields": {
                         "averageYear": {"$round": ["$averageYear", 0]},
                         "maschi": {"$concat": [{"$toString": {
-                            "$toInt": {"$round": [{"$multiply": [{"$divide": ["$maschi", "$count"]}, 100]}, 0]}}}, "%"]},
+                            "$toInt": {"$round": [{"$multiply": [{"$divide": ["$maschi", "$count"]}, 100]}, 0]}}},
+                            "%"]},
                         "femmine": {"$concat": [{"$toString": {
-                            "$toInt": {"$round": [{"$multiply": [{"$divide": ["$femmine", "$count"]}, 100]}, 0]}}}, "%"]}
+                            "$toInt": {"$round": [{"$multiply": [{"$divide": ["$femmine", "$count"]}, 100]}, 0]}}},
+                            "%"]}
                     }
                 }
             ]):
@@ -70,21 +77,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiProvincia(self, coordinate, distance):
-        listaCitta = []
-        for x in self.collectionLocations.aggregate([
-            {
-                "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
-                    "distanceField": "dist.calculated",
-                    "maxDistance": distance,
-                    "query": {"category": "provincia"},
-                    "includeLocs": "dist.location",
-                    "spherical": "true"
-                }
-            }
-        ]):
-            listaCitta.append(x)
+    def retrieveIscrittiProvincia(self, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
@@ -125,21 +119,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiRegione(self, coordinate, distance):
-        listaCitta = []
-        for x in self.collectionLocations.aggregate([
-            {
-                "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
-                    "distanceField": "dist.calculated",
-                    "maxDistance": distance,
-                    "query": {"category": "regione"},
-                    "includeLocs": "dist.location",
-                    "spherical": "true"
-                }
-            }
-        ]):
-            listaCitta.append(x)
+    def retrieveIscrittiRegione(self, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
@@ -180,21 +161,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiNazione(self, coordinate, distance):
-        listaCitta = []
-        for x in self.collectionLocations.aggregate([
-            {
-                "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
-                    "distanceField": "dist.calculated",
-                    "maxDistance": distance,
-                    "query": {"category": "nazione"},
-                    "includeLocs": "dist.location",
-                    "spherical": "true"
-                }
-            }
-        ]):
-            listaCitta.append(x)
+    def retrieveIscrittiNazione(self, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
@@ -234,3 +202,6 @@ class DatabaseManager:
                 a["etaMedia"] = datetime.now().year - z['averageYear']
 
         return listaCitta
+
+
+

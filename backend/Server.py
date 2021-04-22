@@ -7,11 +7,11 @@ service = Service()
 
 @app.route('/calculateLocations', methods=['GET'])
 def giveLocations():
-    category = request.args.get('category',type=str)
-    longitude = request.args.get('longitude',type=float)
+    category = request.args.get('category', type=str)
+    longitude = request.args.get('longitude', type=float)
     latitude = request.args.get('latitude', type=float)
-    distance = request.args.get('distance',type=int)
-    lista = service.retrieveLocations(category, longitude, latitude,distance)
+    distance = request.args.get('distance', type=int)
+    lista = service.retrieveLocations(category, longitude, latitude, distance)
     for y in lista:
         y['_id'] = str(y['_id'])
     return {"lista": lista}
