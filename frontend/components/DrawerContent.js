@@ -15,7 +15,7 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import { Icon } from 'react-native-elements';
+//import { Icon } from 'react-native-elements';
 
 export function DrawerContent(props) {
     return (
@@ -35,31 +35,31 @@ export function DrawerContent(props) {
                     <Drawer.Section style={styles.drawerSection}>
 
                         <DrawerItem
-                            icon={({ color, size }) => (
+                            /*icon={({ color, size }) => (
                                 <Icon
                                     name="university"
                                     color={color}
                                     size={20}
                                     type='font-awesome'
                                 />
-                            )}
+                            )}*/
                             label="Didattica"
                             onPress={() => {  }}
                         />
                         <DrawerItem
-                            icon={({ color, size }) => (
+                           /* icon={({ color, size }) => (
                                 <Icon
                                     name="lightbulb-on-outline"
                                     color={color}
                                     size={size}
                                     type='material-community'
                                 />
-                            )}
+                            )}*/
                             label="Ricerca"
                             onPress={() => {  }}
                         />
                         <DrawerItem
-                            icon={({ color, size }) => (
+                          /*  icon={({ color, size }) => (
                                 <Icon
                                     name='business'
                                     type='material'
@@ -67,24 +67,24 @@ export function DrawerContent(props) {
                                     size={size}
 
                                 />
-                            )}
+                            )}*/
                             label="Terza Missione"
                             onPress={() => {  }}
                         />
                         <DrawerItem
-                            icon={({ color, size }) => (
+                           /* icon={({ color, size }) => (
                                 <Icon
                                     name="face-agent"
                                     color={color}
                                     size={size}
                                     type='material-community'
                                 />
-                            )}
+                            )}*/
                             label="Supporto"
                             onPress={() => {  }}
                         />
                         <DrawerItem
-                            icon={({ color, size }) => (
+                           /* icon={({ color, size }) => (
                                 <Icon
                                     name='map'
                                     type='material'
@@ -92,7 +92,7 @@ export function DrawerContent(props) {
                                     size={size}
 
                                 />
-                            )}
+                            )}*/
                             label="Mappa"
                             onPress={() => { props.navigation.navigate('Mappa') }}
                         />

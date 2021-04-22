@@ -25,8 +25,100 @@ const Mappa = () => {
     const [minimo, setMinimo] = useState(1);
     const [massimo, setMassimo] = useState(250);
     const [index, setIndex] = useState(0);
-    const [raggio, setRaggio] = useState(10);
+    const [raggio, setRaggio] = useState(10000);
     const [categoria, setCategoria] = useState("comune");
+    const [markers, setMarkers] = useState([]);
+
+    /**Funzioni */
+    useEffect(() => {
+        getActualPosition();
+    }, []);
+
+
+
+    function getActualPosition() {
+        /*  PRENDE LA POSIZIONE ATTUALE  */
+        (async () => {
+            let { status } = await Permissions.askAsync(Permissions.LOCATION);
+            if (status !== 'granted') {
+                console.log('PERMISSION DENIED');
+                setErrorMsg("PERMISSION DENIED");
+            }
+            const location = await Location.getCurrentPositionAsync();
+            setLatitudine(location.coords.latitude);
+            setLongitudine(location.coords.longitude);
+            setLocation(location);
+            // prendo i marker da caricare di default
+            axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+                params: {
+                    category: categoria,
+                    longitude: location.coords.longitude,
+                    latitude: location.coords.latitude,
+                    distance: raggio,
+                }
+            }).then(data => {
+                // console.log("data", data.data.lista);
+                setMarkers(data.data.lista);
+            }).catch(error => {
+                console.log(error);
+                setError(true);
+            })
+        })();
+    }
+
+    function getMarkersFromSlider(event) {
+        setRaggio(event);
+        //console.log(event);
+        axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+            params: {
+                category: categoria,
+                longitude: longitudine,
+                latitude: latitudine,
+                distance: event,
+            }
+        }).then(data => {
+            //console.log("data", data.data.lista);
+            setMarkers(data.data.lista);
+        }).catch(error => {
+            console.log(error);
+            setError(true);
+        })
+    }
+
+    function getMarkersFromCategorySelector(index) {
+        setIndex(index);
+        setIndice(index);
+        var category = '';
+        if(index==0){
+            category='comune';
+        }
+        if(index==1){
+            category='provincia';
+        }
+        if(index==2){
+            category='regione';
+        }
+        if(index==3){
+            category='nazione';
+        }
+        //console.log(category);
+        axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+            params: {
+                category: category,
+                longitude: longitudine,
+                latitude: latitudine,
+                distance: raggio,
+            }
+        }).then(data => {
+            //console.log("data", data.data.lista);
+            setMarkers(data.data.lista);
+        }).catch(error => {
+            console.log(error);
+            setError(true);
+        })
+    }
+
+
 
     function setIndice(indice) {
         switch (indice) {
@@ -53,40 +145,11 @@ const Mappa = () => {
         }
     }
 
-    useEffect(() => {
 
-        /*  PRENDE LA POSIZIONE ATTUALE  */
-        (async () => {
-            let { status } = await Permissions.askAsync(Permissions.LOCATION);
-            if (status !== 'granted') {
-                console.log('PERMISSION DENIED');
-                setErrorMsg("PERMISSION DENIED");
-            }
-            const location = await Location.getCurrentPositionAsync();
-            setLatitudine(location.coords.latitude);
-            setLongitudine(location.coords.longitude);
-            setLocation(location);
-        })();
-
-        axios.get(`http://localhost:5000/calculateLocations`, {
-            params: {
-                category: categoria,
-                longitude: longitudine,
-                latitude: latitudine,
-                distance: raggio,
-            }
-        }).then(data => {
-            console.log("data", data);
-        }).catch(error => {
-            console.log(error);
-            setError(true);
-        })
-
-    }, []);
 
     return (
         <View>
-            {latitudine != 0 && longitudine != 0 ?
+            {latitudine != 0 && longitudine != 0  ?
                 <MapView
                     style={styles.map}
                     initialRegion={{
@@ -97,14 +160,14 @@ const Mappa = () => {
                     }}
                     showsUserLocation={true}
                 >
-                    {data.map((marker, index) => (
-                        
+                    {markers.map((marker, index) => (
+
                         <Marker
                             key={index}
-                            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                            title={marker.title}
-                            description={marker.description}
-                            pinColor={marker.pinColor}
+                            coordinate={{ latitude: marker.location.coordinates[1], longitude: marker.location.coordinates[0] }}
+                            title={marker.name}
+                            description={marker.category}
+                        //pinColor={marker.pinColor}
                         >
                             {/* Platform.OS !== 'ios' ? <CustomMarker {...marker} /> : null */}
                             <Callout style={{
@@ -120,7 +183,7 @@ const Mappa = () => {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}>
-                                    <Text style={styles.titolo}>{marker.title}</Text>
+                                    <Text style={styles.titolo}>{marker.name}</Text>
                                 </View>
                                 <View style={{
                                     // borderWidth: 1,
@@ -129,10 +192,10 @@ const Mappa = () => {
                                     justifyContent: 'center',
                                     alignItems: 'flex-start',
                                 }}>
-                                    <Text style={styles.text}>Numero iscritti: {marker.description}</Text>
-                                    <Text style={styles.text}>Maschi: xxx</Text>
-                                    <Text style={styles.text}>Femmine: xxx</Text>
-                                    <Text style={styles.text}>Età media: xxx</Text>
+                                    <Text style={styles.text}>Numero iscritti: {marker.iscritti}</Text>
+                                    <Text style={styles.text}>Maschi: {marker.maschi}</Text>
+                                    <Text style={styles.text}>Femmine: {marker.femmine}</Text>
+                                    <Text style={styles.text}>Età media: {marker.etaMedia}</Text>
                                 </View>
                             </Callout>
                         </Marker>
@@ -155,8 +218,7 @@ const Mappa = () => {
                             values={['Comuni', 'Province', 'Regioni', 'Nazioni']}
                             selectedIndex={index}
                             onChange={(event) => {
-                                setIndex(event.nativeEvent.selectedSegmentIndex),
-                                    setIndice(event.nativeEvent.selectedSegmentIndex)
+                                getMarkersFromCategorySelector(event.nativeEvent.selectedSegmentIndex);
                             }}
                             style={{ height: '100%' }}
                             tintColor={"#007AFF"}
@@ -183,7 +245,7 @@ const Mappa = () => {
                                 minimumTrackTintColor={"#007AFF"}
                                 onValueChange={(event) => {
                                     event = event * 1000,
-                                        setRaggio(event)
+                                        getMarkersFromSlider(event);
                                 }}
                             />
                         </View>

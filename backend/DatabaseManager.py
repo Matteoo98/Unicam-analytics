@@ -70,12 +70,12 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiProvincia(self, coordinate, distance):
+    def retrieveIscrittiProvincia(self,  longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
                 "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
+                    "near": {"type": "Point", "coordinates": [longitude, latitude]},
                     "distanceField": "dist.calculated",
                     "maxDistance": distance,
                     "query": {"category": "provincia"},
@@ -125,12 +125,12 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiRegione(self, coordinate, distance):
+    def retrieveIscrittiRegione(self,  longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
                 "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
+                    "near": {"type": "Point", "coordinates": [longitude, latitude]},
                     "distanceField": "dist.calculated",
                     "maxDistance": distance,
                     "query": {"category": "regione"},
@@ -180,12 +180,12 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiNazione(self, coordinate, distance):
+    def retrieveIscrittiNazione(self,  longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
                 "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [coordinate[0], coordinate[1]]},
+                    "near": {"type": "Point", "coordinates": [longitude, latitude]},
                     "distanceField": "dist.calculated",
                     "maxDistance": distance,
                     "query": {"category": "nazione"},
