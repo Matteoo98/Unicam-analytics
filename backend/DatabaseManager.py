@@ -16,7 +16,7 @@ class DatabaseManager:
         self.collectionLocations = self.db["locations"]
         self.collectionIscritti = self.db["iscritti"]
 
-    def geo_spatial_query(self, longitude, latitude, distance):
+    def geo_spatial_query(self,category, longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
@@ -24,7 +24,7 @@ class DatabaseManager:
                     "near": {"type": "Point", "coordinates": [longitude, latitude]},
                     "distanceField": "dist.calculated",
                     "maxDistance": distance,
-                    "query": {"category": "comune"},
+                    "query": {"category": category},
                     "includeLocs": "dist.location",
                     "spherical": "true"
                 }
@@ -33,8 +33,8 @@ class DatabaseManager:
             listaCitta.append(x)
         return listaCitta
 
-    def retrieveIscrittiComune(self, longitude, latitude, distance):
-        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
+    def retrieveIscrittiComune(self,category, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(category,longitude, latitude, distance)
 
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
@@ -77,8 +77,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiProvincia(self, longitude, latitude, distance):
-        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
+    def retrieveIscrittiProvincia(self,category, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(category,longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
@@ -119,8 +119,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiRegione(self, longitude, latitude, distance):
-        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
+    def retrieveIscrittiRegione(self, category, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(category, longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
@@ -161,8 +161,8 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiNazione(self, longitude, latitude, distance):
-        listaCitta = self.geo_spatial_query(longitude, latitude, distance)
+    def retrieveIscrittiNazione(self,category, longitude, latitude, distance):
+        listaCitta = self.geo_spatial_query(category,longitude, latitude, distance)
         for a in listaCitta:
             for z in self.collectionIscritti.aggregate([
                 {
