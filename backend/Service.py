@@ -1,4 +1,4 @@
-from backend.DatabaseManager import DatabaseManager
+from DatabaseManager import DatabaseManager
 
 
 class Service:

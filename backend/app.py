@@ -1,5 +1,5 @@
 from flask import Flask, request
-from backend.Service import Service
+from Service import Service
 
 app = Flask(__name__)
 service = Service()
