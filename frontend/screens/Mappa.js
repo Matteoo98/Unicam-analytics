@@ -68,7 +68,7 @@ const Mappa = () => {
             setLocation(location);
         })();
 
-        axios.get(`http://locallhost:5000/calculateLocations`, {
+        axios.get(`http://localhost:5000/calculateLocations`, {
             params: {
                 category: categoria,
                 longitude: longitudine,
