@@ -125,7 +125,7 @@ class MyTestCase(unittest.TestCase):
     def test_excel_rowobj(self):
         db = DatabaseManager()
         db.start_connection()
-        lista = db.retrieveIscrittiComune(13.442, 43.2991, 250000)
+        lista = db.getInfoFromComune("Macerata")
         for x in lista:
             print(x)
 

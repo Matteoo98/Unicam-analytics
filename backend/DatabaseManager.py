@@ -63,7 +63,7 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiProvincia(self,  longitude, latitude, distance):
+    def retrieveIscrittiProvincia(self, longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
@@ -110,7 +110,7 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiRegione(self,  longitude, latitude, distance):
+    def retrieveIscrittiRegione(self, longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
@@ -157,7 +157,7 @@ class DatabaseManager:
 
         return listaCitta
 
-    def retrieveIscrittiNazione(self,  longitude, latitude, distance):
+    def retrieveIscrittiNazione(self, longitude, latitude, distance):
         listaCitta = []
         for x in self.collectionLocations.aggregate([
             {
@@ -203,3 +203,61 @@ class DatabaseManager:
             listaCitta.append(x)
 
         return listaCitta
+
+    def getInfoFromComune(self, name):
+        listaInfo = []
+        for x in self.collectionIscritti.aggregate([
+            {
+                "$match": {"iscr_comune_residenza_desc": name}
+            },
+            {"$group": {
+                "_id": "$iscr_cds_desc",
+                "iscr_tipo_titolo_sup_desc": {
+                    "$push": "$iscr_tipo_titolo_sup_desc"
+                },
+                "count": {
+                    "$sum": 1
+                }
+            }},
+            {"$unwind": "$iscr_tipo_titolo_sup_desc"},
+            {
+                "$group": {
+                    "_id": "$iscr_tipo_titolo_sup_desc",
+                    "iscr_tipo_titolo_sup_descCount": {
+                        "$sum": 1
+                    },
+                    "iscr_cds_desc": {
+                        "$push": {
+                            "cds": "$_id",
+                            "cdsCount": "$count"
+                        }
+                    }
+                }
+            },
+            {"$unwind": "$iscr_cds_desc"},
+            {
+                "$group": {
+                    "_id": 1,
+                    "scuoleSuperiori": {
+                        "$addToSet": {
+                            "scuola": "$_id",
+                            "scuolaCount": "$iscr_tipo_titolo_sup_descCount"
+                        }
+                    },
+                    "CorsiUniversita": {
+                        "$addToSet": "$iscr_cds_desc"
+                    }
+                }
+            },
+        ]):
+            listaInfo.append(x)
+        return listaInfo
+
+    def getInfoFromProvincia(self, name):
+        pass
+
+    def getInfoFromRegione(self, name):
+        pass
+
+    def getInfoFromNazione(self, name):
+        pass
