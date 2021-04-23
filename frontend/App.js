@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView, StatusBar } from 'react-native';
-import { NavigationContainer, TabActions } from '@react-navigation/native';
-import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import { Ionicons } from '@expo/vector-icons';
-
-import Mappa from './screens/Mappa';
-import MappaDinamica from './screens/MappaDinamica';
-import HeaderButton from './components/HeaderButton';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { StatusBar } from 'react-native';
 import DrawerContent from './components/DrawerContent';
+import HeaderButton from './components/HeaderButton';
+import Mappa from './screens/Mappa';
+
+
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

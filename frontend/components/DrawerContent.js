@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import { Drawer } from 'react-native-paper';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Image, StyleSheet, View } from 'react-native';
+import { Drawer } from 'react-native-paper';
 
 export function DrawerContent(props) {
     return (

@@ -1,5 +1,4 @@
-import { Platform, Dimensions } from 'react-native';
-import { exp } from 'react-native-reanimated';
+import { Dimensions, Platform } from 'react-native';
 
 const isIos = Platform.OS === 'iso';
 const isAndroid = Platform.OS === 'android';
@@ -11,4 +10,4 @@ export {
     isAndroid,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
-}
+};

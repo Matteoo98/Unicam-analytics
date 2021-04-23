@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
 
 const MappaDinamica = () => {
