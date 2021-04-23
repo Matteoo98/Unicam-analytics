@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import {
-    useTheme,
-    Avatar,
-    Title,
-    Caption,
-    Paragraph,
-    Drawer,
-    Text,
-    TouchableRipple,
-    Switch
-} from 'react-native-paper';
+import { Drawer } from 'react-native-paper';
 import {
     DrawerContentScrollView,
     DrawerItem

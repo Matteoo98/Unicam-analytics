@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
-import MapView, { Circle } from 'react-native-maps';
-import { Marker, Callout } from 'react-native-maps';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import { ActivityIndicator, Colors } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import axios from 'axios';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import React, { useEffect, useState } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import MapView, { Callout, Circle, Marker } from 'react-native-maps';
+import { ActivityIndicator } from 'react-native-paper';
+import { SCREEN_WIDTH } from '../utils/helper';
 
-import data from './data';
-import { color } from 'react-native-reanimated';
-import CustomMarker from '../components/CustomMarker';
 
 const Mappa = () => {
 
