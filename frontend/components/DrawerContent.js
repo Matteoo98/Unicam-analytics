@@ -15,7 +15,10 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-//import { Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; 
 
 export function DrawerContent(props) {
     return (
@@ -35,64 +38,37 @@ export function DrawerContent(props) {
                     <Drawer.Section style={styles.drawerSection}>
 
                         <DrawerItem
-                            /*icon={({ color, size }) => (
-                                <Icon
-                                    name="university"
-                                    color={color}
-                                    size={20}
-                                    type='font-awesome'
-                                />
-                            )}*/
+                            icon={({ color, size }) => (
+                                <FontAwesome name="university" size={20} color={color} />
+                            )}
                             label="Didattica"
-                            onPress={() => {  }}
+                            onPress={() => { }}
                         />
                         <DrawerItem
-                           /* icon={({ color, size }) => (
-                                <Icon
-                                    name="lightbulb-on-outline"
-                                    color={color}
-                                    size={size}
-                                    type='material-community'
-                                />
-                            )}*/
+                            icon={({ color, size }) => (
+                                <MaterialIcons name="monetization-on" size={size} color={color} />
+                            )}
                             label="Ricerca"
-                            onPress={() => {  }}
+                            onPress={() => { }}
                         />
                         <DrawerItem
-                          /*  icon={({ color, size }) => (
-                                <Icon
-                                    name='business'
-                                    type='material'
-                                    color={color}
-                                    size={size}
-
-                                />
-                            )}*/
+                            icon={({ color, size }) => (
+                                <MaterialIcons name="business" size={size} color={color} />
+                            )}
                             label="Terza Missione"
-                            onPress={() => {  }}
+                            onPress={() => { }}
                         />
                         <DrawerItem
-                           /* icon={({ color, size }) => (
-                                <Icon
-                                    name="face-agent"
-                                    color={color}
-                                    size={size}
-                                    type='material-community'
-                                />
-                            )}*/
+                            icon={({ color, size }) => (
+                                <FontAwesome name="support" size={size} color={color} />
+                            )}
                             label="Supporto"
-                            onPress={() => {  }}
+                            onPress={() => { }}
                         />
                         <DrawerItem
-                           /* icon={({ color, size }) => (
-                                <Icon
-                                    name='map'
-                                    type='material'
-                                    color={color}
-                                    size={size}
-
-                                />
-                            )}*/
+                            icon={({ color, size }) => (
+                                <FontAwesome name="map" size={size} color={color} />
+                            )}
                             label="Mappa"
                             onPress={() => { props.navigation.navigate('Mappa') }}
                         />

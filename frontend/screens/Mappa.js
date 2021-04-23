@@ -28,15 +28,15 @@ const Mappa = () => {
     const [raggio, setRaggio] = useState(10000);
     const [categoria, setCategoria] = useState("comune");
     const [markers, setMarkers] = useState([]);
+    const [colore, setColore] = useState("red");
 
-    /**Funzioni */
+    /* FUNZIONI */
     useEffect(() => {
         getActualPosition();
     }, []);
 
-
-
     function getActualPosition() {
+
         /*  PRENDE LA POSIZIONE ATTUALE  */
         (async () => {
             let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -48,7 +48,8 @@ const Mappa = () => {
             setLatitudine(location.coords.latitude);
             setLongitudine(location.coords.longitude);
             setLocation(location);
-            // prendo i marker da caricare di default
+
+            // CARICAMENTO MARKER INIZIALI
             axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
                 params: {
                     category: categoria,
@@ -57,7 +58,6 @@ const Mappa = () => {
                     distance: raggio,
                 }
             }).then(data => {
-                // console.log("data", data.data.lista);
                 setMarkers(data.data.lista);
             }).catch(error => {
                 console.log(error);
@@ -68,7 +68,7 @@ const Mappa = () => {
 
     function getMarkersFromSlider(event) {
         setRaggio(event);
-        //console.log(event);
+
         axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
             params: {
                 category: categoria,
@@ -77,7 +77,6 @@ const Mappa = () => {
                 distance: event,
             }
         }).then(data => {
-            //console.log("data", data.data.lista);
             setMarkers(data.data.lista);
         }).catch(error => {
             console.log(error);
@@ -89,19 +88,20 @@ const Mappa = () => {
         setIndex(index);
         setIndice(index);
         var category = '';
-        if(index==0){
-            category='comune';
+
+        if (index == 0) {
+            category = 'comune';
         }
-        if(index==1){
-            category='provincia';
+        if (index == 1) {
+            category = 'provincia';
         }
-        if(index==2){
-            category='regione';
+        if (index == 2) {
+            category = 'regione';
         }
-        if(index==3){
-            category='nazione';
+        if (index == 3) {
+            category = 'nazione';
         }
-        //console.log(category);
+
         axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
             params: {
                 category: category,
@@ -110,7 +110,6 @@ const Mappa = () => {
                 distance: raggio,
             }
         }).then(data => {
-            //console.log("data", data.data.lista);
             setMarkers(data.data.lista);
         }).catch(error => {
             console.log(error);
@@ -118,38 +117,38 @@ const Mappa = () => {
         })
     }
 
-
-
     function setIndice(indice) {
         switch (indice) {
             case 0:
                 setMinimo(1);
                 setMassimo(250);
                 setCategoria("comune");
+                setColore("red");
                 break;
             case 1:
                 setMinimo(1);
                 setMassimo(1000);
                 setCategoria("provincia");
+                setColore("yellow");
                 break;
             case 2:
                 setMinimo(1);
                 setMassimo(1000);
                 setCategoria("regione");
+                setColore("blue");
                 break;
             case 3:
                 setMinimo(1);
                 setMassimo(14500);
                 setCategoria("nazione");
+                setColore("green");
                 break;
         }
     }
 
-
-
     return (
         <View>
-            {latitudine != 0 && longitudine != 0  ?
+            {latitudine != 0 && longitudine != 0 ?
                 <MapView
                     style={styles.map}
                     initialRegion={{
@@ -167,17 +166,14 @@ const Mappa = () => {
                             coordinate={{ latitude: marker.location.coordinates[1], longitude: marker.location.coordinates[0] }}
                             title={marker.name}
                             description={marker.category}
-                        //pinColor={marker.pinColor}
+                            pinColor={colore}
                         >
-                            {/* Platform.OS !== 'ios' ? <CustomMarker {...marker} /> : null */}
                             <Callout style={{
                                 width: 150,
-                                // height: 100,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
                                 <View style={{
-                                    // borderWidth: 1,
                                     flex: 2,
                                     width: '100%',
                                     justifyContent: 'center',
@@ -186,7 +182,6 @@ const Mappa = () => {
                                     <Text style={styles.titolo}>{marker.name}</Text>
                                 </View>
                                 <View style={{
-                                    // borderWidth: 1,
                                     flex: 4,
                                     width: '100%',
                                     justifyContent: 'center',
@@ -210,7 +205,6 @@ const Mappa = () => {
                 <View style={styles.card}>
                     {/* FILTRO */}
                     <View style={{
-                        // borderWidth: 1,
                         width: '100%',
                         height: '40%',
                     }}>
@@ -229,7 +223,6 @@ const Mappa = () => {
 
                     {/* SLIDER */}
                     <View style={{
-                        // borderWidth: 1,
                         width: '100%',
                         height: '40%',
                         flexDirection: 'row',
