@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import {
     useTheme,
     Avatar,
@@ -15,10 +15,8 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import { Icon } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons'; 
 
 export function DrawerContent(props) {
     return (
