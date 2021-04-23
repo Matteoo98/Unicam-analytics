@@ -1,10 +1,12 @@
 import time
 import unittest
+from datetime import datetime
+
 import pandas as pd
 import pymongo
 from geopy.geocoders import Nominatim
 
-from backend.DatabaseManager import DatabaseManager
+from DatabaseManager import DatabaseManager
 
 
 class MyTestCase(unittest.TestCase):
@@ -87,9 +89,9 @@ class MyTestCase(unittest.TestCase):
         x = collection.aggregate([
             {
                 "$geoNear": {
-                    "near": {"type": "Point", "coordinates": [13.0683092, 43.1357641]},
+                    "near": {"type": "Point", "coordinates": [13.442, 43.2991]},
                     "distanceField": "dist.calculated",
-                    "maxDistance": 10000,
+                    "maxDistance": 250000,
                     "query": {"category": "comune"},
                     "includeLocs": "dist.location",
                     "spherical": "true"
@@ -122,7 +124,10 @@ class MyTestCase(unittest.TestCase):
 
     def test_excel_rowobj(self):
         db = DatabaseManager()
-        db.retrieveIscrittiFromCity()
+        db.start_connection()
+        lista = db.retrieveIscrittiComune(13.442, 43.2991, 250000)
+        for x in lista:
+            print(x)
 
     def test_1(self):
         x = {'_id': '607f10b3f2df1ba40d57a1c3', 'name': 'Macerata',
@@ -171,6 +176,59 @@ class MyTestCase(unittest.TestCase):
             {"$project": {"stockdata": 1}},
             {"$limit": 5}
         ]):
+            print(x)
+
+    def test_velocita(self):
+        client = pymongo.MongoClient(
+            "mongodb+srv://unicamda:unicamda@clusterunicamanalytics.khf6a.mongodb.net/iscritti_unicam?retryWrites=true&w=majority")
+        db = client["iscritti_unicam"]
+        collectionLocations = db["locations"]
+        collectionIscritti = db["iscritti"]
+        listaCitta = []
+        for x in collectionLocations.aggregate([
+            {
+                "$geoNear": {
+                    "near": {"type": "Point", "coordinates": [13.442, 43.2991]},
+                    "distanceField": "dist.calculated",
+                    "maxDistance": 10000,
+                    "query": {"category": "comune"},
+                    "includeLocs": "dist.location",
+                    "spherical": "true"
+                }
+            }, {
+                "$lookup": {
+                    "from": "iscritti",
+                    "localField": "name",
+                    "foreignField": "iscr_comune_residenza_desc",
+                    "as": "iscritti_unicam"
+                }
+            },
+            {"$unwind": "$iscritti_unicam"},
+            {
+                "$group": {
+                    "_id": "$iscritti_unicam.iscr_comune_residenza_desc",
+                    "count": {"$sum": 1},
+                    "name":{"$first":"$name"},
+                    "location": {"$first": "$location"},
+                    "averageYear": {"$avg": {"$toInt": {"$substr": ["$iscritti_unicam.iscr_data_nascita", 6, 4]}}},
+                    "maschi": {"$sum": {"$cond": [{"$eq": ["M", "$iscritti_unicam.iscr_sesso"]}, 1, 0]}},
+                    "femmine": {"$sum": {"$cond": [{"$eq": ["F", "$iscritti_unicam.iscr_sesso"]}, 1, 0]}},
+
+                }
+            },
+            {
+                "$addFields": {
+                    "averageYear": {"$subtract":[datetime.now().year,{"$round": ["$averageYear", 0]}]},
+                    "maschi": {"$concat": [{"$toString": {
+                        "$toInt": {"$round": [{"$multiply": [{"$divide": ["$maschi", "$count"]}, 100]}, 0]}}}, "%"]},
+                    "femmine": {"$concat": [{"$toString": {
+                        "$toInt": {"$round": [{"$multiply": [{"$divide": ["$femmine", "$count"]}, 100]}, 0]}}}, "%"]}
+                }
+            }
+        ]):
+            listaCitta.append(x)
+
+        for x in listaCitta:
             print(x)
 
 
