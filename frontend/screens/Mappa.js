@@ -183,10 +183,10 @@ const Mappa = () => {
                                     justifyContent: 'center',
                                     alignItems: 'flex-start',
                                 }}>
-                                    <Text style={styles.text}>Numero iscritti: {marker.iscritti}</Text>
+                                    <Text style={styles.text}>Numero iscritti: {marker.count}</Text>
                                     <Text style={styles.text}>Maschi: {marker.maschi}</Text>
                                     <Text style={styles.text}>Femmine: {marker.femmine}</Text>
-                                    <Text style={styles.text}>Età media: {marker.etaMedia}</Text>
+                                    <Text style={styles.text}>Età media: {marker.averageYear}</Text>
                                 </View>
                             </Callout>
                         </Marker>
