@@ -8,7 +8,7 @@ import DrawerContent from './components/DrawerContent';
 import HeaderButton from './components/HeaderButton';
 import Mappa from './screens/Mappa';
 
-
+import { Root, Popup } from 'popup-ui';
 
 
 const Stack = createStackNavigator();
@@ -102,6 +102,8 @@ function MainNavigation() {
 
 export default function App() {
   return (
-    <MainNavigation />
+    <Root>
+      <MainNavigation />
+    </Root>
   )
 }
