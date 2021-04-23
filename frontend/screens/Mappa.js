@@ -4,11 +4,13 @@ import axios from 'axios';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import MapView, { Callout, Circle, Marker } from 'react-native-maps';
+import { Platform, StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native';
+import MapView, { Callout, Circle, Marker, CalloutSubview } from 'react-native-maps';
 import { ActivityIndicator } from 'react-native-paper';
 import { SCREEN_WIDTH } from '../utils/helper';
-
+import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import DescrModal from '../components/DescrModal';
 
 const Mappa = () => {
 
@@ -25,6 +27,7 @@ const Mappa = () => {
     const [categoria, setCategoria] = useState("comune");
     const [markers, setMarkers] = useState([]);
     const [colore, setColore] = useState("red");
+    const [visible, setVisible] = useState(false);
 
     /* FUNZIONI */
     useEffect(() => {
@@ -142,6 +145,18 @@ const Mappa = () => {
         }
     }
 
+    function onPress(lat, long) {
+        setLatitudine(lat);
+        setLongitudine(long);
+    }
+
+    openModal = () => {
+        setVisible(true)
+    }
+    closeModal = () => {
+        setVisible(false)
+    }
+
     return (
         <View>
             {latitudine != 0 && longitudine != 0 ?
@@ -187,6 +202,22 @@ const Mappa = () => {
                                     <Text style={styles.text}>Maschi: {marker.maschi}</Text>
                                     <Text style={styles.text}>Femmine: {marker.femmine}</Text>
                                     <Text style={styles.text}>Età media: {marker.averageYear}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }} >
+                                    <CalloutSubview
+                                        onPress={() => {
+                                            onPress(marker.location.coordinates[1], marker.location.coordinates[0])
+                                        }}
+                                        style={styles.calloutButton}
+                                    >
+                                        <MaterialIcons name="gps-fixed" size={25} color="black" />
+                                    </CalloutSubview>
+                                    <CalloutSubview
+                                        onPress={() => {}}
+                                        style={styles.calloutButton}
+                                    >
+                                        <FontAwesome5 name="search-location" size={25} color="black" />
+                                    </CalloutSubview>
                                 </View>
                             </Callout>
                         </Marker>
@@ -301,6 +332,24 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
         fontWeight: "300",
+    },
+    calloutButton: {
+        width: 'auto',
+        backgroundColor: '#fff',
+        paddingHorizontal: 6,
+        paddingVertical: 6,
+        borderRadius: 20,
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 10,
     },
 })
 export default Mappa;
