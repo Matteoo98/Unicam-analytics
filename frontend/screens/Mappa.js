@@ -4,13 +4,15 @@ import axios from 'axios';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity, View, Pressable, Modal, Image } from 'react-native';
 import MapView, { Callout, Circle, Marker, CalloutSubview } from 'react-native-maps';
 import { ActivityIndicator } from 'react-native-paper';
 import { SCREEN_WIDTH } from '../utils/helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import DescrModal from '../components/DescrModal';
+import { Root, Popup, Toast } from 'popup-ui';
 
 const Mappa = () => {
 
@@ -21,13 +23,16 @@ const Mappa = () => {
     const [latitudine, setLatitudine] = useState(0);
     const [longitudine, setLongitudine] = useState(0);
     const [minimo, setMinimo] = useState(1);
-    const [massimo, setMassimo] = useState(250);
+    const [massimo, setMassimo] = useState(100);
     const [index, setIndex] = useState(0);
     const [raggio, setRaggio] = useState(10000);
     const [categoria, setCategoria] = useState("comune");
     const [markers, setMarkers] = useState([]);
     const [colore, setColore] = useState("red");
-    const [visible, setVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [latCliccata, setLatCliccata] = useState(0);
+    const [longCliccata, setLongCliccata] = useState(0);
+    const [dettagliModal, setDettagliModal] = useState(null);
 
     /* FUNZIONI */
     useEffect(() => {
@@ -120,19 +125,19 @@ const Mappa = () => {
         switch (indice) {
             case 0:
                 setMinimo(1);
-                setMassimo(250);
+                setMassimo(100);
                 setCategoria("comune");
                 setColore("red");
                 break;
             case 1:
                 setMinimo(1);
-                setMassimo(1000);
+                setMassimo(250);
                 setCategoria("provincia");
                 setColore("yellow");
                 break;
             case 2:
                 setMinimo(1);
-                setMassimo(1000);
+                setMassimo(800);
                 setCategoria("regione");
                 setColore("blue");
                 break;
@@ -150,15 +155,64 @@ const Mappa = () => {
         setLongitudine(long);
     }
 
-    openModal = () => {
-        setVisible(true)
-    }
-    closeModal = () => {
-        setVisible(false)
+    function getDati(nome, categoria) {
+        axios.get(`https://unicam-analytics.herokuapp.com/`, {
+            params: {
+                name: nome,
+                category: categoria
+            }
+        }).then(data => {
+            setDettagliModal();
+        }).catch(error => {
+            console.log(error);
+            setError(true);
+        })
     }
 
     return (
-        <View>
+        <View style={styles.centeredView}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text>asbrega fioi</Text>
+
+                        <View style={{ flexDirection: 'row', width: '80%', alignItems: 'center', justifyContent: 'space-around' }} >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    onPress(latCliccata, longCliccata);
+                                    Toast.show({
+                                        title: 'Bene!',
+                                        text: 'Posizione aggiornata con successo',
+                                        color: '#2ecc71'
+                                    });
+                                    setModalVisible(!modalVisible);
+                                }}
+                                style={styles.calloutButton}
+                            >
+                                <MaterialIcons name="gps-fixed" size={25} color="#2ecc71" />
+                            </TouchableOpacity>
+                            <View style={{ alignContent: 'center', justifyContent: 'center' }} >
+                                <TouchableOpacity
+                                    style={styles.calloutButton}
+                                    onPress={() => {
+                                        setModalVisible(!modalVisible);
+                                    }}
+                                >
+                                    <AntDesign name="close" size={25} color="red" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             {latitudine != 0 && longitudine != 0 ?
                 <MapView
                     style={styles.map}
@@ -179,11 +233,18 @@ const Mappa = () => {
                             description={marker.category}
                             pinColor={colore}
                         >
-                            <Callout style={{
-                                width: 150,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
+                            <Callout
+                                onPress={() => {
+                                    setLatCliccata(marker.location.coordinates[1]);
+                                    setLongCliccata(marker.location.coordinates[0]);
+                                    getDati(marker.name, marker.category);
+                                    setModalVisible(true);
+                                }}
+                                style={{
+                                    width: 150,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
                                 <View style={{
                                     flex: 2,
                                     width: '100%',
@@ -203,22 +264,11 @@ const Mappa = () => {
                                     <Text style={styles.text}>Femmine: {marker.femmine}</Text>
                                     <Text style={styles.text}>Età media: {marker.averageYear}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' }} >
-                                    <CalloutSubview
-                                        onPress={() => {
-                                            onPress(marker.location.coordinates[1], marker.location.coordinates[0])
-                                        }}
-                                        style={styles.calloutButton}
-                                    >
-                                        <MaterialIcons name="gps-fixed" size={25} color="black" />
-                                    </CalloutSubview>
-                                    <CalloutSubview
-                                        onPress={() => {}}
-                                        style={styles.calloutButton}
-                                    >
-                                        <FontAwesome5 name="search-location" size={25} color="black" />
-                                    </CalloutSubview>
+
+                                <View style={styles.calloutButton} >
+                                    <FontAwesome5 name="search-location" size={25} color="#007AFF" />
                                 </View>
+
                             </Callout>
                         </Marker>
                     ))}
@@ -265,7 +315,7 @@ const Mappa = () => {
                                 minimumTrackTintColor={"#007AFF"}
                                 onValueChange={(event) => {
                                     event = event * 1000,
-                                        getMarkersFromSlider(event);
+                                    getMarkersFromSlider(event);
                                 }}
                             />
                         </View>
@@ -350,6 +400,49 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.34,
         shadowRadius: 6.27,
         elevation: 10,
+    },
+    modalView: {
+        width: SCREEN_WIDTH / 1.13,
+        height: "60%",
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        justifyContent: 'space-around',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 })
 export default Mappa;
