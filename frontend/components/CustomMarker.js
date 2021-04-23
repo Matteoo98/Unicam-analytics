@@ -1,11 +1,6 @@
 import React from 'react';
 import {
-    StyleSheet,
-    View,
-    Text,
-    Dimensions,
-    TouchableOpacity,
-    ImageBackground,
+    Text, View
 } from 'react-native';
 
 const CustomMarker = (props) => {

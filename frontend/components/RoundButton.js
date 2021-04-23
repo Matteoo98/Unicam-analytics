@@ -1,7 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 const RoundButton = (props) => {
     const plusImage = require('../assets/images/plus.png');

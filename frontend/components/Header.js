@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
+import { Text } from 'react-native';
 import { DataTable } from 'react-native-paper';
 
 

@@ -1,6 +1,5 @@
-import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity, View } from 'react-native';
+import React from 'react';
 
 const HeaderButton = (props) => {
 
