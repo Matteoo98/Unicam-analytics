@@ -155,18 +155,10 @@ const Mappa = () => {
         setLongitudine(long);
     }
 
-    function getDati(nome, categoria) {
-        axios.get(`https://unicam-analytics.herokuapp.com/`, {
-            params: {
-                name: nome,
-                category: categoria
-            }
-        }).then(data => {
-            setDettagliModal();
-        }).catch(error => {
-            console.log(error);
-            setError(true);
-        })
+    function Grafico(){
+        // dropdown a scelta col tipo di dato che si vuole vedere
+        // grafici usando l'hooks dettaglimodal che vanno in base alla scelta sopra
+        return <Text>GRAFICO</Text>
     }
 
     return (
@@ -183,7 +175,7 @@ const Mappa = () => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text>asbrega fioi</Text>
-
+                        <Grafico/>
                         <View style={{ flexDirection: 'row', width: '80%', alignItems: 'center', justifyContent: 'space-around' }} >
                             <TouchableOpacity
                                 onPress={() => {
@@ -237,7 +229,7 @@ const Mappa = () => {
                                 onPress={() => {
                                     setLatCliccata(marker.location.coordinates[1]);
                                     setLongCliccata(marker.location.coordinates[0]);
-                                    getDati(marker.name, marker.category);
+                                    setDettagliModal(marker);
                                     setModalVisible(true);
                                 }}
                                 style={{
