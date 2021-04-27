@@ -60,7 +60,13 @@ class DatabaseManager:
             }
         ]):
             listaCitta.append(x)
-
+        lista_comuni = [x['name'] for x in listaCitta]
+        listaInfo = self.getInfoFromComune(lista_comuni)
+        for x in listaCitta:
+            for y in listaInfo:
+                if x['name'] == y['_id']:
+                    x['cds'] = y["CorsiUniversita"]
+                    x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
     def retrieveIscrittiProvincia(self, longitude, latitude, distance):
@@ -107,7 +113,13 @@ class DatabaseManager:
             }
         ]):
             listaCitta.append(x)
-
+        lista_provincie = [x['name'] for x in listaCitta]
+        listaInfo = self.getInfoFromProvincia(lista_provincie)
+        for x in listaCitta:
+            for y in listaInfo:
+                if x['name'] == y['_id']:
+                    x['cds'] = y["CorsiUniversita"]
+                    x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
     def retrieveIscrittiRegione(self, longitude, latitude, distance):
@@ -154,7 +166,13 @@ class DatabaseManager:
             }
         ]):
             listaCitta.append(x)
-
+        lista_regioni = [x['name'] for x in listaCitta]
+        listaInfo = self.getInfoFromRegione(lista_regioni)
+        for x in listaCitta:
+            for y in listaInfo:
+                if x['name'] == y['_id']:
+                    x['cds'] = y["CorsiUniversita"]
+                    x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
     def retrieveIscrittiNazione(self, longitude, latitude, distance):
@@ -201,17 +219,31 @@ class DatabaseManager:
             }
         ]):
             listaCitta.append(x)
-
+        lista_nazioni = [x['name'] for x in listaCitta]
+        listaInfo = self.getInfoFromNazione(lista_nazioni)
+        for x in listaCitta:
+            for y in listaInfo:
+                if x['name'] == y['_id']:
+                    x['cds'] = y["CorsiUniversita"]
+                    x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
-    def getInfoFromComune(self, name):
+    def getInfoFromComune(self, lista_comuni):
         listaInfo = []
         for x in self.collectionIscritti.aggregate([
             {
-                "$match": {"iscr_comune_residenza_desc": name}
+                "$match": {
+                    "iscr_comune_residenza_desc": {
+                        "$in": lista_comuni
+                    }
+                }
             },
+
             {"$group": {
-                "_id": "$iscr_cds_desc",
+                "_id": {
+                    "cds": "$iscr_cds_desc",
+                    "comune": "$iscr_comune_residenza_desc"
+                },
                 "iscr_tipo_titolo_sup_desc": {
                     "$push": "$iscr_tipo_titolo_sup_desc"
                 },
@@ -222,13 +254,16 @@ class DatabaseManager:
             {"$unwind": "$iscr_tipo_titolo_sup_desc"},
             {
                 "$group": {
-                    "_id": "$iscr_tipo_titolo_sup_desc",
+                    "_id": {
+                        "scuola": "$iscr_tipo_titolo_sup_desc",
+                        "comune": "$_id.comune"
+                    },
                     "iscr_tipo_titolo_sup_descCount": {
                         "$sum": 1
                     },
                     "iscr_cds_desc": {
                         "$push": {
-                            "cds": "$_id",
+                            "cds": "$_id.cds",
                             "cdsCount": "$count"
                         }
                     }
@@ -237,10 +272,10 @@ class DatabaseManager:
             {"$unwind": "$iscr_cds_desc"},
             {
                 "$group": {
-                    "_id": 1,
+                    "_id": "$_id.comune",
                     "scuoleSuperiori": {
                         "$addToSet": {
-                            "scuola": "$_id",
+                            "scuola": "$_id.scuola",
                             "scuolaCount": "$iscr_tipo_titolo_sup_descCount"
                         }
                     },
@@ -253,11 +288,185 @@ class DatabaseManager:
             listaInfo.append(x)
         return listaInfo
 
-    def getInfoFromProvincia(self, name):
-        pass
+    def getInfoFromProvincia(self, lista_provincia):
+        listaInfo = []
+        for x in self.collectionIscritti.aggregate([
+            {
+                "$match": {
+                    "provincia_residenza_sigla_55": {
+                        "$in": lista_provincia
+                    }
+                }
+            },
 
-    def getInfoFromRegione(self, name):
-        pass
+            {"$group": {
+                "_id": {
+                    "cds": "$iscr_cds_desc",
+                    "comune": "$provincia_residenza_sigla_55"
+                },
+                "iscr_tipo_titolo_sup_desc": {
+                    "$push": "$iscr_tipo_titolo_sup_desc"
+                },
+                "count": {
+                    "$sum": 1
+                }
+            }},
+            {"$unwind": "$iscr_tipo_titolo_sup_desc"},
+            {
+                "$group": {
+                    "_id": {
+                        "scuola": "$iscr_tipo_titolo_sup_desc",
+                        "comune": "$_id.comune"
+                    },
+                    "iscr_tipo_titolo_sup_descCount": {
+                        "$sum": 1
+                    },
+                    "iscr_cds_desc": {
+                        "$push": {
+                            "cds": "$_id.cds",
+                            "cdsCount": "$count"
+                        }
+                    }
+                }
+            },
+            {"$unwind": "$iscr_cds_desc"},
+            {
+                "$group": {
+                    "_id": "$_id.comune",
+                    "scuoleSuperiori": {
+                        "$addToSet": {
+                            "scuola": "$_id.scuola",
+                            "scuolaCount": "$iscr_tipo_titolo_sup_descCount"
+                        }
+                    },
+                    "CorsiUniversita": {
+                        "$addToSet": "$iscr_cds_desc"
+                    }
+                }
+            },
+        ]):
+            listaInfo.append(x)
+        return listaInfo
 
-    def getInfoFromNazione(self, name):
+    def getInfoFromRegione(self, lista_regioni):
+        listaInfo = []
+        for x in self.collectionIscritti.aggregate([
+            {
+                "$match": {
+                    "iscr_regione_residenza_desc": {
+                        "$in": lista_regioni
+                    }
+                }
+            },
+
+            {"$group": {
+                "_id": {
+                    "cds": "$iscr_cds_desc",
+                    "comune": "$iscr_regione_residenza_desc"
+                },
+                "iscr_tipo_titolo_sup_desc": {
+                    "$push": "$iscr_tipo_titolo_sup_desc"
+                },
+                "count": {
+                    "$sum": 1
+                }
+            }},
+            {"$unwind": "$iscr_tipo_titolo_sup_desc"},
+            {
+                "$group": {
+                    "_id": {
+                        "scuola": "$iscr_tipo_titolo_sup_desc",
+                        "comune": "$_id.comune"
+                    },
+                    "iscr_tipo_titolo_sup_descCount": {
+                        "$sum": 1
+                    },
+                    "iscr_cds_desc": {
+                        "$push": {
+                            "cds": "$_id.cds",
+                            "cdsCount": "$count"
+                        }
+                    }
+                }
+            },
+            {"$unwind": "$iscr_cds_desc"},
+            {
+                "$group": {
+                    "_id": "$_id.comune",
+                    "scuoleSuperiori": {
+                        "$addToSet": {
+                            "scuola": "$_id.scuola",
+                            "scuolaCount": "$iscr_tipo_titolo_sup_descCount"
+                        }
+                    },
+                    "CorsiUniversita": {
+                        "$addToSet": "$iscr_cds_desc"
+                    }
+                }
+            },
+        ]):
+            listaInfo.append(x)
+        return listaInfo
+
+    def getInfoFromNazione(self, lista_nazioni):
+        listaInfo = []
+        for x in self.collectionIscritti.aggregate([
+            {
+                "$match": {
+                    "iscr_nazione_residenza_desc": {
+                        "$in": lista_nazioni
+                    }
+                }
+            },
+
+            {"$group": {
+                "_id": {
+                    "cds": "$iscr_cds_desc",
+                    "comune": "$iscr_nazione_residenza_desc"
+                },
+                "iscr_tipo_titolo_sup_desc": {
+                    "$push": "$iscr_tipo_titolo_sup_desc"
+                },
+                "count": {
+                    "$sum": 1
+                }
+            }},
+            {"$unwind": "$iscr_tipo_titolo_sup_desc"},
+            {
+                "$group": {
+                    "_id": {
+                        "scuola": "$iscr_tipo_titolo_sup_desc",
+                        "comune": "$_id.comune"
+                    },
+                    "iscr_tipo_titolo_sup_descCount": {
+                        "$sum": 1
+                    },
+                    "iscr_cds_desc": {
+                        "$push": {
+                            "cds": "$_id.cds",
+                            "cdsCount": "$count"
+                        }
+                    }
+                }
+            },
+            {"$unwind": "$iscr_cds_desc"},
+            {
+                "$group": {
+                    "_id": "$_id.comune",
+                    "scuoleSuperiori": {
+                        "$addToSet": {
+                            "scuola": "$_id.scuola",
+                            "scuolaCount": "$iscr_tipo_titolo_sup_descCount"
+                        }
+                    },
+                    "CorsiUniversita": {
+                        "$addToSet": "$iscr_cds_desc"
+                    }
+                }
+            },
+        ]):
+            listaInfo.append(x)
+        return listaInfo
+
+    def test(self):
         pass

@@ -17,14 +17,14 @@ def giveLocations():
     return {"lista": lista}
 
 
-@app.route('/giveInfoFromCity', methods=['GET'])
-def giveInfoFromCity():
-    name = request.args.get('name', type=str)
-    category = request.args.get('category', type=str)
-    lista = service.retrieveInfoFromCity(name, category)
-    for y in lista:
-        y['_id'] = str(y['_id'])
-    return {"lista": lista}
+# @app.route('/giveInfoFromCity', methods=['GET'])
+# def giveInfoFromCity():
+#     name = request.args.get('name', type=str)
+#     category = request.args.get('category', type=str)
+#     lista = service.retrieveInfoFromCity(name, category)
+#     for y in lista:
+#         y['_id'] = str(y['_id'])
+#     return {"lista": lista}
 
 
 @app.route('/', methods=['GET'])

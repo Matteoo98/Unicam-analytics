@@ -125,7 +125,7 @@ class MyTestCase(unittest.TestCase):
     def test_excel_rowobj(self):
         db = DatabaseManager()
         db.start_connection()
-        lista = db.getInfoFromComune("Macerata")
+        lista = db.test()
         for x in lista:
             print(x)
 
