@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import math
 import pymongo
 
 
@@ -62,6 +62,15 @@ class DatabaseManager:
             listaCitta.append(x)
         lista_comuni = [x['name'] for x in listaCitta]
         listaInfo = self.getInfoFromComune(lista_comuni)
+        for y in listaInfo:
+            for a in y["scuoleSuperiori"]:
+                if str(a['scuola']) == 'nan':
+                    a['scuola'] = "Name Not Found"
+            for a in y["CorsiUniversita"]:
+                if str(a['cds']) == 'nan':
+                    a['cds'] = "Name Not Found"
+            # y["scuoleSuperiori"] = [x['scuola'] if str(x['scuola']) == 'nan' else x for x in y["scuoleSuperiori"]]
+            # y["CorsiUniversita"] = [0 if str(x['cds']) == 'nan' else x for x in y["CorsiUniversita"]]
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
@@ -115,6 +124,13 @@ class DatabaseManager:
             listaCitta.append(x)
         lista_provincie = [x['name'] for x in listaCitta]
         listaInfo = self.getInfoFromProvincia(lista_provincie)
+        for y in listaInfo:
+            for a in y["scuoleSuperiori"]:
+                if str(a['scuola']) == 'nan':
+                    a['scuola'] = "Name Not Found"
+            for a in y["CorsiUniversita"]:
+                if str(a['cds']) == 'nan':
+                    a['cds'] = "Name Not Found"
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
@@ -168,6 +184,13 @@ class DatabaseManager:
             listaCitta.append(x)
         lista_regioni = [x['name'] for x in listaCitta]
         listaInfo = self.getInfoFromRegione(lista_regioni)
+        for y in listaInfo:
+            for a in y["scuoleSuperiori"]:
+                if str(a['scuola']) == 'nan':
+                    a['scuola'] = "Name Not Found"
+            for a in y["CorsiUniversita"]:
+                if str(a['cds']) == 'nan':
+                    a['cds'] = "Name Not Found"
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
@@ -221,6 +244,13 @@ class DatabaseManager:
             listaCitta.append(x)
         lista_nazioni = [x['name'] for x in listaCitta]
         listaInfo = self.getInfoFromNazione(lista_nazioni)
+        for y in listaInfo:
+            for a in y["scuoleSuperiori"]:
+                if str(a['scuola']) == 'nan':
+                    a['scuola'] = "Name Not Found"
+            for a in y["CorsiUniversita"]:
+                if str(a['cds']) == 'nan':
+                    a['cds'] = "Name Not Found"
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
