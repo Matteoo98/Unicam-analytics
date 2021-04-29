@@ -41,7 +41,7 @@ npm start
 
 
 
-This will open the expo metro-bundler on your default browser, at this point you can choose different kinds of simulators:
+This will open the expo metro-bundler on your default browser, at this point you can choose different ways to start the application:
 
 ![Screenshot (3)](https://user-images.githubusercontent.com/56272257/116522645-b732eb00-a8d5-11eb-9b58-acdc2d0fba6c.png)
 
