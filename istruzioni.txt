@@ -1,0 +1,2 @@
+dopo aver installato un nuovo pip fare pip freeze > requirements.txt
+poi gli altri aprono il file requirements.txt tasto destro e via
