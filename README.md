@@ -57,10 +57,15 @@ Remember to allow the use of your geo-localization on your device after the firs
 
 If you are using your physical device, take care to be connected on the same network if you want to use it wireless via LAN, or choose TUNNEL if you are on different networks, finally LOCAL if you want to wire it to your computer (Android requires ADB permissions).
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## Authors
+[Matteo Molteni](https://github.com/Matteoo98) 
 
-Please make sure to update tests as appropriate.
+[Mattia Romagnoli](https://github.com/Mattia-98) 
+
+[Vittorio Rinaldi](https://github.com/victor356) 
+
+[Tommaso Cippitelli](https://github.com/Tcippy) 
+
 
 ## License 
 [MIT](https://choosealicense.com/licenses/mit/)
