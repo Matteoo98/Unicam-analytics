@@ -39,14 +39,23 @@ Alway inside ./frontend/ directory, run
 npm start
 ```
 
+
+
 This will open the expo metro-bundler on your default browser, at this point you can choose different kinds of simulators:
 
-- run it on your physical smartphone via previous installation of Expo Go app from [Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=it&gl=US) or
+![Screenshot (3)](https://user-images.githubusercontent.com/56272257/116522645-b732eb00-a8d5-11eb-9b58-acdc2d0fba6c.png)
+
+
+- run it on your physical device by shooting the QRcode through Expo Go app available on [Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=it&gl=US) or
 [App Store](https://apps.apple.com/it/app/expo-go/id982107779)
 
 - [Android Studio](https://developer.android.com/studio) or even [Xcode](https://developer.apple.com/documentation/xcode/running-your-app-in-the-simulator-or-on-a-device) simulator if you are on MacOS
 
+
+
 Remember to allow the use of your geo-localization on your device after the first start.
+
+If you are using your physical device, take care to be connected on the same network if you want to use it wireless via LAN, or choose TUNNEL if you are on different networks, finally LOCAL if you want to wire it to your computer (Android requires ADB permissions).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
