@@ -74,8 +74,11 @@ class DatabaseManager:
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
+                    y["CorsiUniversita"].sort(key=lambda a: a['cdsCount'], reverse=True)
                     x['cds'] = y["CorsiUniversita"]
+                    y["scuoleSuperiori"].sort(key=lambda a: a["scuolaCount"], reverse=True)
                     x['superiori'] = y["scuoleSuperiori"]
+
         return listaCitta
 
     def retrieveIscrittiProvincia(self, longitude, latitude, distance):
@@ -134,7 +137,9 @@ class DatabaseManager:
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
+                    y["CorsiUniversita"].sort(key=lambda a: a['cdsCount'], reverse=True)
                     x['cds'] = y["CorsiUniversita"]
+                    y["scuoleSuperiori"].sort(key=lambda a: a["scuolaCount"], reverse=True)
                     x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
@@ -194,7 +199,9 @@ class DatabaseManager:
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
+                    y["CorsiUniversita"].sort(key=lambda a: a['cdsCount'], reverse=True)
                     x['cds'] = y["CorsiUniversita"]
+                    y["scuoleSuperiori"].sort(key=lambda a: a["scuolaCount"], reverse=True)
                     x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
@@ -254,7 +261,9 @@ class DatabaseManager:
         for x in listaCitta:
             for y in listaInfo:
                 if x['name'] == y['_id']:
+                    y["CorsiUniversita"].sort(key=lambda a: a['cdsCount'], reverse=True)
                     x['cds'] = y["CorsiUniversita"]
+                    y["scuoleSuperiori"].sort(key=lambda a: a["scuolaCount"], reverse=True)
                     x['superiori'] = y["scuoleSuperiori"]
         return listaCitta
 
@@ -312,7 +321,7 @@ class DatabaseManager:
                     "CorsiUniversita": {
                         "$addToSet": "$iscr_cds_desc"
                     }
-                }
+                },
             },
         ]):
             listaInfo.append(x)
