@@ -1,5 +1,7 @@
 # STATS-UNICAM#ESSE3
 
+![Alt text](1.jpg?raw=true "Titolo")
+
 The objective of this project is to perform data analysis on the data of Unicam ESSE3 dataset. 
 
 The analysis must consider the information available in the main ESSE3 database to identify meaningful information.
