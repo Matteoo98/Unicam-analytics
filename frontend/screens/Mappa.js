@@ -11,38 +11,36 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import DescrModal from '../components/DescrModal';
 import { Root, Popup, Toast } from 'popup-ui';
 import CardSlider from 'react-native-cards-slider';
 import { VictoryPie, VictoryBar, VictoryTheme, VictoryAxis, VictoryChart, VictoryLabel } from 'victory-native';
 import { DataTable } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
-const larghezza = width / 1.3;
 const DOT_SIZE = 40;
 const TICKER_HEIGHT = 40;
-const CIRCLE_SIZE = width * 0.6;
+const CIRCLE_SIZE = (width / 1.05) * 0.6;
 
 const data = [
     {
         key: 'first',
-        color: '#63CEEB',
+        color: '#007AFF',
         type: 'GENERE',
     },
     {
         key: 'second',
-        color: '#26F09F',
+        color: '#007AFF',
         type: 'CORSI DI STUDIO',
     },
     {
         key: 'third',
-        color: '#F05441',
+        color: '#007AFF',
         type: 'SCUOLE SUPERIORI',
     },
 ];
 
 const Ticker = ({ scrollX }) => {
-    const inputRange = [-width, 0, width];
+    const inputRange = [-(width / 1.05), 0, (width / 1.05)];
     const translateY = scrollX.interpolate({
         inputRange,
         outputRange: [TICKER_HEIGHT, 0, -TICKER_HEIGHT],
@@ -63,7 +61,7 @@ const Ticker = ({ scrollX }) => {
 };
 
 const Pagination = ({ scrollX }) => {
-    const inputRange = [-width, 0, width];
+    const inputRange = [-(width / 1.05), 0, (width / 1.05)];
     const translateX = scrollX.interpolate({
         inputRange,
         outputRange: [-DOT_SIZE, 0, DOT_SIZE],
@@ -75,7 +73,6 @@ const Pagination = ({ scrollX }) => {
                     styles.paginationIndicator,
                     {
                         position: 'absolute',
-                        // backgroundColor: 'red',
                         transform: [{ translateX }],
                     },
                 ]}
@@ -240,7 +237,27 @@ const Mappa = () => {
         setLongitudine(long);
     }
 
-    function GraficoSesso() {
+    function GraficoSesso(pippo) {
+
+        // COSTANTI PER ANIMAZIONI
+        const inputRange = [(pippo.index - 1) * width / 1.05, pippo.index * width / 1.05, (pippo.index + 1) * width / 1.05];
+        const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+        });
+        const inputRangeOpacity = [
+            (pippo.index - 0.3) * width / 1.05,
+            pippo.index * width / 1.05,
+            (pippo.index + 0.3) * width / 1.05,
+        ];
+        const opacity = scrollX.interpolate({
+            inputRange: inputRangeOpacity,
+            outputRange: [0, 1, 0],
+        });
+        const translateXHeading = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+        });
 
         var maschi = dettagliModal.maschi;
         var femmine = dettagliModal.femmine;
@@ -253,142 +270,100 @@ const Mappa = () => {
         let numMaschi = Math.round((totale * maschi) / 100);
         let numFemmine = Math.round((totale * femmine) / 100);
 
-        // console.log("maschi: ", maschi, "femmine: ", femmine);
-
         let pino = [
             { x: "Maschi", y: maschi },
             { x: "Femmine", y: femmine }
         ];
 
-        return <View style={{
-            // width: SCREEN_WIDTH / 1.15,
-            // height: SCREEN_HEIGHT / 2.5,
-            // alignItems: 'center',
-            // justifyContent: 'center',
-            // borderWidth: 1,
-            // marginLeft: 5,
-            // marginRight: 5,
-            width,
+        return <Animated.View style={{
+            width: width / 1.05,
+            // width,
             // height,
             alignItems: 'center',
             justifyContent: 'center',
+            transform: [{ scale, translateX: translateXHeading }],
+            opacity,
         }}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ width: SCREEN_WIDTH / 1.3 }} >
-                    <VictoryPie
-                        theme={VictoryTheme.material}
-                        data={pino}
-                        animate={{
-                            duration: 2000
-                        }}
-                        colorScale={["#2978b5", "#e36bae"]}
-                        labels={({ datum }) => datum.y + "%"}
-                        // height={SCREEN_WIDTH / 1.25}
-                        width={SCREEN_WIDTH / 1.3}
-                        style={{
-                            labels: { fontSize: Dimensions.get('window').height > 700 ? 10 : 8, fontWeight: "bold" },
-                            data: { fillOpacity: 0.9, stroke: "#fff", strokeWidth: 5 }
-                        }}
-                        innerRadius={50}
-                    />
-                </View>
-                <View style={{ width: SCREEN_WIDTH / 1.3 }} >
-                    <DataTable>
-                        <DataTable.Header>
-                            <DataTable.Title style={{ justifyContent: 'center' }}>Maschi</DataTable.Title>
-                            <DataTable.Title style={{ justifyContent: 'center' }}>Femmine</DataTable.Title>
-                            <DataTable.Title style={{ justifyContent: 'center' }}>Totale</DataTable.Title>
-                        </DataTable.Header>
+            <View style={{ width: SCREEN_WIDTH / 1.3, flex: 2, alignContent: 'center', justifyContent: 'center' }} >
+                <VictoryPie
+                    theme={VictoryTheme.material}
+                    data={pino}
+                    animate={{
+                        duration: 2000
+                    }}
+                    colorScale={["#2978b5", "#e36bae"]}
+                    labels={({ datum }) => datum.y + "%"}
+                    // height={SCREEN_WIDTH / 1.25}
+                    width={SCREEN_WIDTH / 1.3}
+                    style={{
+                        labels: { fontSize: Dimensions.get('window').height > 700 ? 10 : 8, fontWeight: "bold" },
+                        data: { fillOpacity: 0.9, stroke: "#fff", strokeWidth: 5 }
+                    }}
+                    innerRadius={50}
+                />
+            </View>
+            <View style={{ width: SCREEN_WIDTH / 1.3, flex: 1 }} >
+                <DataTable>
+                    <DataTable.Header>
+                        <DataTable.Title style={{ justifyContent: 'center' }}>Maschi</DataTable.Title>
+                        <DataTable.Title style={{ justifyContent: 'center' }}>Femmine</DataTable.Title>
+                        <DataTable.Title style={{ justifyContent: 'center' }}>Totale</DataTable.Title>
+                    </DataTable.Header>
 
-                        <DataTable.Row>
-                            <DataTable.Cell style={{ justifyContent: 'center' }}>{numMaschi}</DataTable.Cell>
-                            <DataTable.Cell style={{ justifyContent: 'center' }}>{numFemmine}</DataTable.Cell>
-                            <DataTable.Cell style={{ justifyContent: 'center' }}>{totale}</DataTable.Cell>
-                        </DataTable.Row>
-
-
-                    </DataTable>
-                </View>
-            </ScrollView>
-        </View>
+                    <DataTable.Row>
+                        <DataTable.Cell style={{ justifyContent: 'center' }}>{numMaschi}</DataTable.Cell>
+                        <DataTable.Cell style={{ justifyContent: 'center' }}>{numFemmine}</DataTable.Cell>
+                        <DataTable.Cell style={{ justifyContent: 'center' }}>{totale}</DataTable.Cell>
+                    </DataTable.Row>
+                </DataTable>
+            </View>
+        </Animated.View>
     }
-    function GraficoCds() {
+    function GraficoCds(pippo) {
+
+        // COSTANTI PER ANIMAZIONI
+        const inputRange = [(pippo.index - 1) * width / 1.05, pippo.index * width / 1.05, (pippo.index + 1) * width / 1.05];
+        const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+        });
+        const inputRangeOpacity = [
+            (pippo.index - 0.3) * width / 1.05,
+            pippo.index * width / 1.05,
+            (pippo.index + 0.3) * width / 1.05,
+        ];
+        const opacity = scrollX.interpolate({
+            inputRange: inputRangeOpacity,
+            outputRange: [0, 1, 0],
+        });
+        const translateXHeading = scrollX.interpolate({
+            inputRange,
+            outputRange: [(width / 1.05) * 0.1, 0, -(width / 1.05) * 0.1],
+        });
 
         let lista = dettagliModal.cds;
-        let top3 = lista.slice(0, 4);
+        let top3 = lista.slice(0, 3);
         let list;
-        // console.log("lista", lista);
 
         const itemsPerPage = 5;
         const from = page * itemsPerPage;
         const to = (page + 1) * itemsPerPage;
 
-        return <View style={{
-            /* width: SCREEN_WIDTH / 1.2,
-            height: SCREEN_HEIGHT / 2.5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            // borderWidth: 1,
-            marginLeft: 5,
-            marginRight: 5, */
-            width,
+        return <Animated.View style={{
+            width: width / 1.05,
+            // width,
             // height,
             alignItems: 'center',
             justifyContent: 'center',
+            transform: [{ scale, translateX: translateXHeading }],
+            opacity,
         }}>
-            <View style={{ width: SCREEN_WIDTH / 1.3 }} >
-                <DataTable>
-                    <DataTable.Header>
-                        <DataTable.Title>Corsi</DataTable.Title>
-                        <DataTable.Title numeric>Inscritti</DataTable.Title>
-                    </DataTable.Header>
-
-                    {list = lista
-                        .slice(
-                            page * itemsPerPage,
-                            page * itemsPerPage + itemsPerPage,
-                        )
-                        .map((item, index) =>
-                            <DataTable.Row key={index}>
-                                <DataTable.Cell>{item.cds}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.cdsCount}</DataTable.Cell>
-                            </DataTable.Row>
-                        )}
-
-                    <DataTable.Pagination
-                        page={page}
-                        numberOfPages={Math.floor(lista.length / itemsPerPage)}
-                        onPageChange={page => setPage(page)}
-                        label={`${from + 1}-${to} of ${lista.length}`}
-                    />
-                </DataTable>
-            </View>
-        </View>
-    }
-    function GraficoScuolaSup() {
-
-        let lista = dettagliModal.superiori;
-        let top3 = lista.slice(0, 3);
-        let list;
-        const itemsPerPage = 5;
-        const from = page2 * itemsPerPage;
-        const to = (page2 + 1) * itemsPerPage;
-
-        return <View style={{
-            /* width: SCREEN_WIDTH / 1.2,
-            height: SCREEN_HEIGHT / 2.5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            // borderWidth: 1,
-            marginLeft: 5,
-            marginRight: 5, */
-            width,
-            // height,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ width: SCREEN_WIDTH / 1.3 }} >
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ backgroundColor: '#f3f3f3', borderRadius: 20 }}>
+                <View style={{
+                    width: SCREEN_WIDTH / 1.3,
+                    height: Dimensions.get('window').height > 700 ? SCREEN_WIDTH / 1.3 : SCREEN_WIDTH / 1.45,
+                    alignContent: 'center', justifyContent: 'center'
+                }} >
                     <VictoryChart
                         theme={VictoryTheme.material}
                         domainPadding={25}
@@ -397,7 +372,6 @@ const Mappa = () => {
                         <VictoryAxis
                             style={{
                                 grid: { stroke: "#C9D1D1", strokeDasharray: "2 10" },
-                                // tickLabels: { fontSize: 10 }
                             }}
                             tickFormat={() => ''}
                         />
@@ -414,8 +388,112 @@ const Mappa = () => {
                                 duration: 2000,
                                 onLoad: { duration: 1000 }
                             }}
-                            // labelComponent={<VictoryLabel dx={0} />}
-                            labels={({ datum }) => `${datum.scuola}`}
+                            labels={({ datum }) => datum.cds.length > 10 ? `${datum.cds.slice(0, 3)}` : `${datum.cds}`}
+                            x="cds"
+                            y="cdsCount"
+                            data={top3}
+                        />
+                    </VictoryChart>
+                </View>
+                <View style={{ width: SCREEN_WIDTH / 1.3 }} >
+                    <DataTable>
+                        <DataTable.Header>
+                            <DataTable.Title>Corsi</DataTable.Title>
+                            <DataTable.Title numeric>Inscritti</DataTable.Title>
+                        </DataTable.Header>
+
+                        {list = lista
+                            .slice(
+                                page * itemsPerPage,
+                                page * itemsPerPage + itemsPerPage,
+                            )
+                            .map((item, index) =>
+                                <DataTable.Row key={index}>
+                                    <DataTable.Cell>{item.cds}</DataTable.Cell>
+                                    <DataTable.Cell numeric>{item.cdsCount}</DataTable.Cell>
+                                </DataTable.Row>
+                            )}
+
+                        <DataTable.Pagination
+                            page={page}
+                            numberOfPages={Math.floor(lista.length / itemsPerPage)}
+                            onPageChange={page => setPage(page)}
+                            label={`${from + 1}-${to} of ${lista.length}`}
+                        />
+                    </DataTable>
+                </View>
+            </ScrollView>
+        </Animated.View>
+    }
+    function GraficoScuolaSup(pippo) {
+        
+        // COSTANTI PER ANIMAZIONI
+        const inputRange = [(pippo.index - 1) * width / 1.05, pippo.index * width / 1.05, (pippo.index + 1) * width / 1.05];
+        const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+        });
+        const inputRangeOpacity = [
+            (pippo.index - 0.3) * width / 1.05,
+            pippo.index * width / 1.05,
+            (pippo.index + 0.3) * width / 1.05,
+        ];
+        const opacity = scrollX.interpolate({
+            inputRange: inputRangeOpacity,
+            outputRange: [0, 1, 0],
+        });
+        const translateXHeading = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+        });
+
+        let lista = dettagliModal.superiori;
+        let top3 = lista.slice(0, 3);
+        let list;
+        const itemsPerPage = 5;
+        const from = page2 * itemsPerPage;
+        const to = (page2 + 1) * itemsPerPage;
+
+        return <Animated.View style={{
+            width: width / 1.05,
+            // width,
+            // height,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: [{ scale, translateX: translateXHeading }],
+            opacity,
+        }}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ backgroundColor: '#f3f3f3', borderRadius: 20 }}>
+                <View style={{
+                    width: SCREEN_WIDTH / 1.3,
+                    height: Dimensions.get('window').height > 700 ? SCREEN_WIDTH / 1.3 : SCREEN_WIDTH / 1.45,
+                    alignContent: 'center', justifyContent: 'center'
+                }} >
+                    <VictoryChart
+                        theme={VictoryTheme.material}
+                        domainPadding={25}
+                        width={SCREEN_WIDTH / 1.3}
+                    >
+                        <VictoryAxis
+                            style={{
+                                grid: { stroke: "#C9D1D1", strokeDasharray: "2 10" },
+                            }}
+                            tickFormat={() => ''}
+                        />
+                        <VictoryAxis
+                            dependentAxis
+                            style={{
+                                grid: { stroke: "#C9D1D1", strokeDasharray: "2 10" },
+                                tickLabels: { fontSize: 15 }
+                            }}
+                        />
+                        <VictoryBar
+                            style={{ labels: { fontSize: 10, fill: 'black', fontWeight: 600 }, data: { fill: "#2089dc" } }}
+                            animate={{
+                                duration: 2000,
+                                onLoad: { duration: 1000 }
+                            }}
+                            labels={({ datum }) => `${datum.scuola.replace('Maturità', '').toUpperCase().slice(0, 4)}`}
                             x="scuola"
                             y="scuolaCount"
                             data={top3}
@@ -450,7 +528,7 @@ const Mappa = () => {
                     </DataTable>
                 </View>
             </ScrollView>
-        </View>
+        </Animated.View>
     }
 
     return (
@@ -468,16 +546,14 @@ const Mappa = () => {
                     flex: 1,
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor: "rgba(0,0,0,0.4)"
+                    backgroundColor: "rgba(0,0,0,0.5)"
                 }}>
                     <View style={{
-                        width: width,
+                        width: width / 1.05,
+                        // width,
                         height: height / 1.24,
-                        // margin: 20,
                         backgroundColor: "#f3f3f3",
                         borderRadius: 20,
-                        // alignItems: "center",
-                        // justifyContent: 'space-around',
                     }}>
                         <View style={{
                             alignItems: 'center',
@@ -497,12 +573,13 @@ const Mappa = () => {
                                 shadowRadius: 4,
                                 elevation: 5,
                             }}>
-                                <Text style={styles.tickerText}>DETTAGLI {nome.toUpperCase()}</Text>
+                                <Text style={styles.tickerText2}>DETTAGLI {nome.toUpperCase()}</Text>
                             </View>
                         </View>
                         {/* ************************************************************************** */}
                         <View style={{
-                            width,
+                            width: width / 1.05,
+                            // width,
                             // height: height / 1.5,
                             flex: 6,
                             backgroundColor: '#fff',
@@ -514,6 +591,7 @@ const Mappa = () => {
                             shadowOpacity: 0.25,
                             shadowRadius: 4,
                             elevation: 5,
+                            borderRadius: 20,
                         }}>
                             <View style={{
                                 flex: 1,
@@ -526,7 +604,7 @@ const Mappa = () => {
                                     keyExtractor={(item) => item.key}
                                     data={data}
                                     renderItem={({ item, index }) => (
-                                        item.key == "first" ? <GraficoSesso /> : item.key == "second" ? <GraficoCds /> : item.key == "third" ? <GraficoScuolaSup /> : null
+                                        item.key == "first" ? <GraficoSesso index={index} scrollX={scrollX} /> : item.key == "second" ? <GraficoCds index={index} scrollX={scrollX} /> : item.key == "third" ? <GraficoScuolaSup index={index} scrollX={scrollX} /> : null
                                     )}
                                     pagingEnabled
                                     showsHorizontalScrollIndicator={false}
@@ -549,7 +627,8 @@ const Mappa = () => {
                         {/* ************************************************************************** */}
                         <View style={{
                             flexDirection: 'row',
-                            width,
+                            width: width / 1.05,
+                            // width,
                             alignItems: 'center',
                             justifyContent: 'space-around',
                             flex: 1,
@@ -612,7 +691,7 @@ const Mappa = () => {
                                     setModalVisible(true);
                                 }}
                                 style={{
-                                    width: 150,
+                                    width: 160,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
@@ -625,21 +704,38 @@ const Mappa = () => {
                                     <Text style={styles.titolo}>{marker.name}</Text>
                                 </View>
                                 <View style={{
-                                    flex: 4,
+                                    flex: 5,
                                     width: '100%',
                                     justifyContent: 'center',
-                                    alignItems: 'flex-start',
+                                    //alignItems: 'flex-start',
+                                    flexDirection: 'column',
                                 }}>
-                                    <Text style={styles.text}>Numero iscritti: {marker.count}</Text>
-                                    <Text style={styles.text}>Maschi: {marker.maschi}</Text>
-                                    <Text style={styles.text}>Femmine: {marker.femmine}</Text>
-                                    <Text style={styles.text}>Età media: {marker.averageYear}</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flex: 3, alignItems: 'flex-start' }}><Text style={styles.text}>Numero iscritti: </Text></View>
+                                        <View style={{ flex: 1, alignItems: 'flex-start' }}><Text style={styles.text}>{marker.count}</Text></View>
+                                    </View>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flex: 3, alignItems: 'flex-start' }}><Text style={styles.text}>Maschi: </Text></View>
+                                        <View style={{ flex: 1, alignItems: 'flex-start' }}><Text style={styles.text}>{marker.maschi}</Text></View>
+                                    </View>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flex: 3, alignItems: 'flex-start' }}><Text style={styles.text}>Femmine: </Text></View>
+                                        <View style={{ flex: 1, alignItems: 'flex-start' }}><Text style={styles.text}>{marker.femmine}</Text></View>
+                                    </View>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flex: 3, alignItems: 'flex-start' }}><Text style={styles.text}>Età media: </Text></View>
+                                        <View style={{ flex: 1, alignItems: 'flex-start' }}><Text style={styles.text}>{marker.averageYear}</Text></View>
+                                    </View>
                                 </View>
-
-                                <View style={styles.calloutButton} >
-                                    <FontAwesome5 name="search-location" size={25} color="#007AFF" />
+                                <View style={{
+                                    flex: 1,
+                                    //width: '100%',
+                                    justifyContent: 'center',
+                                }}>
+                                    <View style={styles.calloutButton} >
+                                        <FontAwesome5 name="search-location" size={25} color="#007AFF" />
+                                    </View>
                                 </View>
-
                             </Callout>
                         </Marker>
                     ))}
@@ -820,7 +916,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     itemStyle: {
-        width,
+        width: width,
         // height,
         alignItems: 'center',
         justifyContent: 'center',
@@ -834,7 +930,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     textContainer: {
-        width,
+        width: width,
         justifyContent: 'center',
         alignItems: 'center',
         // alignItems: 'flex-start',
@@ -900,7 +996,12 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         fontWeight: '800',
     },
-
+    tickerText2: {
+        fontSize: 15,
+        lineHeight: TICKER_HEIGHT,
+        textTransform: 'uppercase',
+        fontWeight: '800',
+    },
     circleContainer: {
         alignItems: 'center',
         justifyContent: 'center',
