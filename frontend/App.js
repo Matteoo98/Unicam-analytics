@@ -7,6 +7,7 @@ import { StatusBar } from 'react-native';
 import DrawerContent from './components/DrawerContent';
 import HeaderButton from './components/HeaderButton';
 import Mappa from './screens/Mappa';
+import { Provider as PaperProvider } from "react-native-paper";
 
 import { Root, Popup } from 'popup-ui';
 
@@ -102,8 +103,10 @@ function MainNavigation() {
 
 export default function App() {
   return (
-    <Root>
-      <MainNavigation />
-    </Root>
+    <PaperProvider>
+      <Root>
+        <MainNavigation />
+      </Root>
+    </PaperProvider>
   )
 }
