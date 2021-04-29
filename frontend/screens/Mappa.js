@@ -12,7 +12,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Root, Popup, Toast } from 'popup-ui';
-import CardSlider from 'react-native-cards-slider';
 import { VictoryPie, VictoryBar, VictoryTheme, VictoryAxis, VictoryChart, VictoryLabel } from 'victory-native';
 import { DataTable } from 'react-native-paper';
 
@@ -254,10 +253,6 @@ const Mappa = () => {
             inputRange: inputRangeOpacity,
             outputRange: [0, 1, 0],
         });
-        const translateXHeading = scrollX.interpolate({
-            inputRange,
-            outputRange: [0, 1, 0],
-        });
 
         var maschi = dettagliModal.maschi;
         var femmine = dettagliModal.femmine;
@@ -281,7 +276,7 @@ const Mappa = () => {
             // height,
             alignItems: 'center',
             justifyContent: 'center',
-            transform: [{ scale, translateX: translateXHeading }],
+            transform: [{ scale }],
             opacity,
         }}>
             <View style={{ width: SCREEN_WIDTH / 1.3, flex: 2, alignContent: 'center', justifyContent: 'center' }} >
@@ -336,10 +331,6 @@ const Mappa = () => {
             inputRange: inputRangeOpacity,
             outputRange: [0, 1, 0],
         });
-        const translateXHeading = scrollX.interpolate({
-            inputRange,
-            outputRange: [(width / 1.05) * 0.1, 0, -(width / 1.05) * 0.1],
-        });
 
         let lista = dettagliModal.cds;
         let top3 = lista.slice(0, 3);
@@ -355,7 +346,7 @@ const Mappa = () => {
             // height,
             alignItems: 'center',
             justifyContent: 'center',
-            transform: [{ scale, translateX: translateXHeading }],
+            transform: [{ scale }],
             opacity,
         }}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ backgroundColor: '#f3f3f3', borderRadius: 20 }}>
@@ -442,10 +433,6 @@ const Mappa = () => {
             inputRange: inputRangeOpacity,
             outputRange: [0, 1, 0],
         });
-        const translateXHeading = scrollX.interpolate({
-            inputRange,
-            outputRange: [0, 1, 0],
-        });
 
         let lista = dettagliModal.superiori;
         let top3 = lista.slice(0, 3);
@@ -460,7 +447,7 @@ const Mappa = () => {
             // height,
             alignItems: 'center',
             justifyContent: 'center',
-            transform: [{ scale, translateX: translateXHeading }],
+            transform: [{ scale }],
             opacity,
         }}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ backgroundColor: '#f3f3f3', borderRadius: 20 }}>
