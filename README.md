@@ -78,11 +78,12 @@ docker image ls
 ```
 Then let's run our image container
 ```bash
-docker run -it -p 5000:5000 <your username>/unicam-analytics
+docker run -p 5000:5000 -d <your username>/unicam-analytics
 ```
-In the above command the -p flag is used to publish a container’s port to the host. Here, we’re mapping port 5000 inside our docker container to port 5000 on our host machine so that we can access the app at localhost:5000,
-The -d flag runs the container in background and prints the container ID.
-This allows you to test your app locally. Which will be hosted on http://localhost:5000.
+In the above command the -p flag is used to publish a container’s port to the host.
+Here, we’re mapping port 5000 inside our docker container to port 5000 on our host machine so that we can access the app at localhost:5000.
+The -d flag runs the container in background and prints the container ID(detached mode).
+This allows you to test your app locally which will be hosted on http://localhost:5000.
 End the server by pressing “Ctrl + C”.
 
 ## Authors
