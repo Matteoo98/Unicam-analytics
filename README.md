@@ -69,6 +69,14 @@ Then you have to enter in the backend folder and execute the following commands:
 docker build -t <your username>/unicam-analytics .
 ```
 The above command usese the Dockerfile placed in the backend folder to create a docker image
+the -t flag is used to give a name to the newly-created image.
+This task may take upto 16 minutes to finish running, depending on your internet speed.
+
+Run the below command to verify that you successfully built a docker image. If you see your image(unicam-analytics) listed there, that means you are successful.
+```bash
+docker image ls
+```
+Then let's run our image container
 ```bash
 docker run -it -p 5000:5000 <your username>/unicam-analytics
 ```
