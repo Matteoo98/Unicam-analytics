@@ -59,6 +59,24 @@ Remember to allow the use of your geo-localization on your device after the firs
 
 If you are using your physical device, take care to be connected on the same network if you want to use it wireless via LAN, or choose TUNNEL if you are on different networks, finally LOCAL if you want to wire it to your computer (Android requires ADB permissions).
 
+# How to run dockerized server locally
+The server is deployed on heroku and the expo app communicate with it, but if you want to run the server in your local machine, then you need:
+- Docker
+- Python 3.8 at least
+
+Then you have to enter in the backend folder and execute the following commands:
+```bash
+docker build -t <your username>/unicam-analytics .
+```
+The above command usese the Dockerfile placed in the backend folder to create a docker image
+```bash
+docker run -it -p 5000:5000 <your username>/unicam-analytics
+```
+In the above command the -p flag is used to publish a container’s port to the host. Here, we’re mapping port 5000 inside our docker container to port 5000 on our host machine so that we can access the app at localhost:5000,
+The -d flag runs the container in background and prints the container ID.
+This allows you to test your app locally. Which will be hosted on http://localhost:5000.
+End the server by pressing “Ctrl + C”.
+
 ## Authors
 [Matteo Molteni](https://github.com/Matteoo98) 
 
