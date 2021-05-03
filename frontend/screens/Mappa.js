@@ -135,7 +135,7 @@ const Mappa = () => {
             setLocation(location);
 
             // CARICAMENTO MARKER INIZIALI
-            axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+            axios.get(`https://unicam-docker-analytics.herokuapp.com/calculateLocations`, {
                 params: {
                     category: categoria,
                     longitude: location.coords.longitude,
@@ -154,7 +154,7 @@ const Mappa = () => {
     function getMarkersFromSlider(event) {
         setRaggio(event);
 
-        axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+        axios.get(`https://unicam-docker-analytics.herokuapp.com/calculateLocations`, {
             params: {
                 category: categoria,
                 longitude: longitudine,
@@ -187,7 +187,7 @@ const Mappa = () => {
             category = 'nazione';
         }
 
-        axios.get(`https://unicam-analytics.herokuapp.com/calculateLocations`, {
+        axios.get(`https://unicam-docker-analytics.herokuapp.com/calculateLocations`, {
             params: {
                 category: category,
                 longitude: longitudine,
