@@ -68,6 +68,7 @@ Then you have to get in the \backend folder and execute the following commands:
 ```bash
 docker build -t <your username>/unicam-analytics .
 ```
+(Don't forget the dot).
 The above command uses the Dockerfile placed in the backend folder to create a docker image
 the -t flag is used to give a name to the newly-created image.
 This task may take up to 16 minutes to finish running, depending on your internet connection.
@@ -78,11 +79,10 @@ docker image ls
 ```
 Then let's run our image container
 ```bash
-docker run -p 5000:5000 -d <your username>/unicam-analytics
+docker run -p 5000:5000 <your username>/unicam-analytics
 ```
 In the above command the -p flag is used to publish a container’s port to the host.
 Here, we’re mapping port 5000 inside our docker container to port 5000 on our host machine so that we can access the app at localhost:5000.
-The -d flag runs the container in background and prints the container ID(detached mode).
 This allows you to test your app locally which will be hosted on http://localhost:5000.
 End the server by pressing “Ctrl + C”.
 
