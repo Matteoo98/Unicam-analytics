@@ -63,6 +63,11 @@ If you are using your physical device, take care to be connected on the same net
 
 # How to run dockerized server locally
 ![Alt text](docs/diagrams/SystemArchitectureDocker.png?raw=true "dock")
+
+## Architecture
+The following system starts from the ETL procedure by which polishes the input data to finally put them in the MongoDB. 
+The user, by the dedicated UI uses the controller API to ask for data. Those are provided by specific queries from the DB manager to the MongoDB, and then provided to the the controller.
+
 The server is deployed on heroku and the expo app communicates with it, but if you want to run the server in your local machine, then you need to install:
 - Docker
 - Python 3.8 at least
