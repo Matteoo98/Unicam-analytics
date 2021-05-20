@@ -41,7 +41,7 @@ cd ETL-Config
 ```
 build the docker image
 ```
-docker build -t <your username>/unicam-analytics-etl 
+docker build -t <your username>/unicam-analytics-etl .
 ```
 run the docker image
 ```
