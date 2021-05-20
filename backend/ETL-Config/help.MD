@@ -1,6 +1,7 @@
 # ETL & DB DOCUMENTATION
 
 In this documentation is possible to find all informations regarding the ETL process and the db configuration.
+![Alt text](https://github.com/Matteoo98/Unicam-analytics/blob/489d87247b84ab062ed97954841da6b693e584b5/docs/diagrams/ETLdiagram.svg?raw=true "etl")
 
 # Prerequisites
 - Python 3.8 at least
