@@ -20,10 +20,6 @@ The Main objectives are:
 The user is able to visualize students based on the above classification criteria.
 The visualization is implemented by means of a geolocation visualization (map). 
 
-# System architecture
-This is the architecture
-![Alt text](docs/diagrams/SystemArchitectureHeroku.png?raw=true "arch")
-
 # Frontend
 
 ### Prerequisites
@@ -66,6 +62,7 @@ Remember to allow the use of your geo-localization on your device after the firs
 If you are using your physical device, take care to be connected on the same network if you want to use it wireless via LAN, or choose TUNNEL if you are on different networks, finally LOCAL if you want to wire it to your computer (Android requires ADB permissions).
 
 # How to run dockerized server locally
+![Alt text](docs/diagrams/SystemArchitectureDocker.png?raw=true "dock")
 The server is deployed on heroku and the expo app communicates with it, but if you want to run the server in your local machine, then you need to install:
 - Docker
 - Python 3.8 at least
@@ -93,6 +90,7 @@ This allows you to test your app locally which will be hosted on http://localhos
 End the server by pressing “Ctrl + C”.
 
 # How to deploy dockerized server on heroku
+![Alt text](docs/diagrams/SystemArchitectureHeroku.png?raw=true "herk")
 If you want to build your server with docker and then deploy it on heroku follow these steps:
 - build docker image of the program
 ```bash
