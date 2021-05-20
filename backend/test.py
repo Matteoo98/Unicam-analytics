@@ -1,3 +1,4 @@
+import json
 import time
 import unittest
 from datetime import datetime
@@ -208,7 +209,7 @@ class MyTestCase(unittest.TestCase):
                 "$group": {
                     "_id": "$iscritti_unicam.iscr_comune_residenza_desc",
                     "count": {"$sum": 1},
-                    "name":{"$first":"$name"},
+                    "name": {"$first": "$name"},
                     "location": {"$first": "$location"},
                     "averageYear": {"$avg": {"$toInt": {"$substr": ["$iscritti_unicam.iscr_data_nascita", 6, 4]}}},
                     "maschi": {"$sum": {"$cond": [{"$eq": ["M", "$iscritti_unicam.iscr_sesso"]}, 1, 0]}},
@@ -218,7 +219,7 @@ class MyTestCase(unittest.TestCase):
             },
             {
                 "$addFields": {
-                    "averageYear": {"$subtract":[datetime.now().year,{"$round": ["$averageYear", 0]}]},
+                    "averageYear": {"$subtract": [datetime.now().year, {"$round": ["$averageYear", 0]}]},
                     "maschi": {"$concat": [{"$toString": {
                         "$toInt": {"$round": [{"$multiply": [{"$divide": ["$maschi", "$count"]}, 100]}, 0]}}}, "%"]},
                     "femmine": {"$concat": [{"$toString": {
@@ -230,6 +231,22 @@ class MyTestCase(unittest.TestCase):
 
         for x in listaCitta:
             print(x)
+
+    def test_config(self):
+        data = None
+        with open('ETL-Config/mongodb_config.json') as f:
+            data = json.load(f)
+        print(data['excel_name'])
+        df = pd.read_excel('ETL-Config/example.xlsx')
+        print(df)
+
+    def test_collection(self):
+        client = pymongo.MongoClient(
+            "mongodb+srv://unicamda:unicamda@clusterunicamanalytics.khf6a.mongodb.net/iscritti_unicam?retryWrites=true&w=majority")
+        db = client["iscritti_unicam"]
+        collection = db["locations"]
+        entry = collection.find_one({"name": "MC"}, {"_id": 1, "location": 1, "category": 1})
+        print(entry)
 
 
 if __name__ == '__main__':

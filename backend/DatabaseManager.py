@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 import math
 import pymongo
@@ -8,13 +9,15 @@ class DatabaseManager:
     db = None
     collectionLocations = None
     collectionIscritti = None
+    json_config = None
 
     def start_connection(self):
-        self.client = pymongo.MongoClient(
-            "mongodb+srv://unicamda:unicamda@clusterunicamanalytics.khf6a.mongodb.net/iscritti_unicam?retryWrites=true&w=majority")
-        self.db = self.client["iscritti_unicam"]
-        self.collectionLocations = self.db["locations"]
-        self.collectionIscritti = self.db["iscritti"]
+        with open('ETL-Config/settings.json') as f:
+            json_config = json.load(f)
+        self.client = pymongo.MongoClient(json_config['connection_url'])
+        self.db = self.client[json_config['db_name']]
+        self.collectionLocations = self.db[json_config['locations']]
+        self.collectionIscritti = self.db[json_config['iscritti']]
 
     def retrieveIscrittiComune(self, longitude, latitude, distance):
         listaCitta = []

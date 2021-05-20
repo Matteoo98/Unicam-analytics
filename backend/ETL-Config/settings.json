@@ -1,0 +1,7 @@
+{
+  "excel_name": "example.xlsx",
+  "connection_url": "mongodb+srv://unicamda:unicamda@clusterunicamanalytics.khf6a.mongodb.net/iscritti_unicam?retryWrites=true&w=majority",
+  "db_name": "iscritti_unicam",
+  "db_collection_for_excel": "iscritti",
+  "db_collection_for_locations": "locations"
+}
