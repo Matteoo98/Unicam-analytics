@@ -20,21 +20,27 @@ The Main objectives are:
 The user is able to visualize students based on the above classification criteria.
 The visualization is implemented by means of a geolocation visualization (map). 
 
-# Prerequisites
+# System architecture
+This is the architecture
+![Alt text](docs/diagrams/SystemArchitectureHeroku.png?raw=true "arch")
+
+# Frontend
+
+### Prerequisites
 
 - NodeJS 14
 - Expo 4.4.1
 - npm 6.14.12
 
 
-# Installation
+### Installation
 
 Enter to the directory ./frontend/ and run via terminal
 ```bash
 npm install
 ```
 
-# Usage
+### Usage
 Alway inside ./frontend/ directory, run
 
 ```bash
@@ -85,6 +91,33 @@ In the above command the -p flag is used to publish a container’s port to the 
 Here, we’re mapping port 5000 inside our docker container to port 5000 on our host machine so that we can access the app at localhost:5000.
 This allows you to test your app locally which will be hosted on http://localhost:5000.
 End the server by pressing “Ctrl + C”.
+
+# How to deploy dockerized server on heroku
+If you want to build your server with docker and then deploy it on heroku follow these steps:
+- build docker image of the program
+```bash
+docker build -t <your username>/unicam-analytics .
+```
+- login to heroku
+```bash
+heroku login
+```
+- sign into Container Registry
+```bash
+heroku container:login
+```
+- push your Docker-based app
+```bash
+heroku container:push web
+```
+- deploy the changes
+```bash
+heroku container:release web
+```
+# Execute ETL process
+This is the architecture
+![Alt text](docs/diagrams/ETLdiagram.svg?raw=true "etl")
+To remake the entire process with your own datasource see the [ETL documentation](backend/ETL-Config/help.MD)
 
 ## Authors
 [Matteo Molteni](https://github.com/Matteoo98) 
