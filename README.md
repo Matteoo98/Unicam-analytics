@@ -126,7 +126,7 @@ heroku container:push web
 heroku container:release web
 ```
 # Execute ETL process
-This is the architecture
+Here we describe the ETL procedure (if you use dark theme open the picture separately).
 ![Alt text](docs/diagrams/ETLdiagram.svg?raw=true "etl")
 To remake the entire process with your own datasource see the [ETL documentation](backend/ETL-Config/help.MD)
 
