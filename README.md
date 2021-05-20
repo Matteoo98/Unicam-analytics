@@ -96,6 +96,10 @@ End the server by pressing “Ctrl + C”.
 
 # How to deploy dockerized server on heroku
 ![Alt text](docs/diagrams/SystemArchitectureHeroku.png?raw=true "herk")
+
+## Architecture
+The system basically works like the local one, but we have to consider that all the back-end is clustered in a Docker image and then uploaded on the Heroku server, to run remotely in a shared way.
+
 Before to deploy your server on heroku you need to have:
 - Docker 
 - Heroku account
