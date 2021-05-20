@@ -94,6 +94,7 @@ End the server by pressing “Ctrl + C”.
 Before to deploy your server on heroku you need to have:
 - Docker 
 - Heroku account
+
 If you want to build your server with docker and then deploy it on heroku follow these steps:
 - build docker image of the program
 ```bash
