@@ -67,11 +67,11 @@ If you are using your physical device, take care to be connected on the same net
 ## Architecture
 The following system starts from the ETL procedure by which polishes the input data to finally put them in the MongoDB. 
 The user, by the dedicated UI uses the controller API to ask for data. Those are provided by specific queries from the DB manager to the MongoDB, and then provided to the the controller.
-
+## Prerequisite
 The server is deployed on heroku and the expo app communicates with it, but if you want to run the server in your local machine, then you need to install:
 - Docker
 - Python 3.8 at least
-
+## Usage
 Then you have to get in the \backend folder and execute the following commands:
 ```bash
 docker build -t <your username>/unicam-analytics .
@@ -99,11 +99,11 @@ End the server by pressing “Ctrl + C”.
 
 ## Architecture
 The system basically works like the local one, but we have to consider that all the back-end is clustered in a Docker image and then uploaded on the Heroku server, to run remotely in a shared way.
-
+## Prerequisite
 Before to deploy your server on heroku you need to have:
 - Docker 
 - Heroku account
-
+## Usage
 If you want to build your server with docker and then deploy it on heroku follow these steps:
 - build docker image of the program
 ```bash
